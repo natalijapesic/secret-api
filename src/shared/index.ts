@@ -1,7 +1,5 @@
-import { JwtPayload } from '@/auth';
+import { JwtPayload } from "modules/auth";
 
-export * from './typeorm/typeorm.service';
-export * from './types/enums';
 export const ROLES_KEY = 'roles';
 
 declare module 'express' {

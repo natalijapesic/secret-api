@@ -21,8 +21,11 @@ export class UserService {
     return user;
   }
 
-  async addOne(newUser: RegisterUserDto): Promise<User> {
-    return this.repository.create(newUser);
+  async addOne(newUser: RegisterUserDto) {
+    const user = this.repository.create(newUser);
+    await this.repository.persistAndFlush(user);
+
+    return user;
   }
 
   async get(id: string): Promise<ResponseUserDto> {
@@ -44,7 +47,7 @@ export class UserService {
     return id;
   }
 
-  async getAll(): Promise<ResponseUserDto[]> {
+  async getAll() {
     return (await this.repository.findAll()).map((user) => {
       const { password, jmbg, ...response } = user;
       return response;
