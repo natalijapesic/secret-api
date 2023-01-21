@@ -1,16 +1,28 @@
 import {
+  BaseEntity,
   Collection,
   Entity,
   Enum,
   ManyToMany,
   Property,
+  Unique,
 } from '@mikro-orm/core';
-import { Base } from 'src/entities/Base';
-import { Exam } from 'src/entities/Exam';
+import { Exam } from 'core/entities';
+import { v4 as uuidv4 } from 'uuid';
 
 @Entity()
-export class User extends Base {
+export class User extends BaseEntity<User, 'id'> {
+  id: string = uuidv4();
+
   @Property()
+  name!: string;
+
+  @Property()
+  @Unique()
+  username: string;
+
+  @Property()
+  @Unique()
   email: string;
 
   @Property()
@@ -18,6 +30,9 @@ export class User extends Base {
 
   @Property()
   wallet: string;
+
+  @Property()
+  jmbg: string;
 
   @Enum(() => Role)
   role: Role;
