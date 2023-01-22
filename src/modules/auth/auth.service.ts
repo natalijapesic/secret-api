@@ -6,6 +6,7 @@ import { ResponseUserDto } from 'modules/user/dto/response.dto';
 import { User } from 'core/entities';
 import { UserService } from 'modules/user/user.service';
 import { RegisterUserDto } from 'modules/user/dto/register-user.dto';
+import { SignUserDto } from 'modules/user/dto/sign-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -40,7 +41,6 @@ export class AuthService {
   ): Promise<ResponseUserDto> {
     const user: User = await this.usersService.findOne(username);
     if (await verify(user.password, password)) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, jmbg, ...response } = user;
       return response;
     }
@@ -48,7 +48,12 @@ export class AuthService {
     throw new BadRequestException(['Password does not matches']);
   }
 
-  async signIn(user: User): Promise<AuthResponse> {
+  async signIn(request: SignUserDto): Promise<AuthResponse> {
+    const user = await this.validateUserCredentials(
+      request.username,
+      request.password,
+    );
+
     const payload: JwtPayload = {
       username: user.username,
       sub: user.id,

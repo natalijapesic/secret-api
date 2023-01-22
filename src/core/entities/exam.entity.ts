@@ -32,7 +32,7 @@ export class Exam extends BaseEntity<Exam, 'id'> {
   @ManyToMany(() => User)
   students = new Collection<User>(this);
 
-  @ManyToMany(() => User, 'exams', { owner: true })
+  @ManyToMany(() => User)
   organizations = new Collection<User>(this);
 }
 

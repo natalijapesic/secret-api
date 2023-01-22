@@ -8,9 +8,9 @@ import {
 } from '@nestjs/common';
 import { ResponseUserDto } from './dto/response.dto';
 import { UserService } from './user.service';
-import { JwtAuthGuard } from 'modules/auth/guards';
+import { ApiTags } from '@nestjs/swagger';
 
-@UseGuards(JwtAuthGuard)
+@ApiTags('User')
 @Controller('user')
 export class UserController {
   @Inject(UserService)
