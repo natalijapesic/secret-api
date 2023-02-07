@@ -46,6 +46,6 @@ app.post('/decrypt', async (req: Request, res: Response) => {
     res.json(content);
 });
 
-app.listen(PORT ?? 9000, async () => {
+app.listen(PORT, async () => {
     console.log(`🚀 server started at http://localhost:${PORT}`);
 });

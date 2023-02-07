@@ -1,0 +1,27 @@
+.header-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+    background-color: #eee7e7;
+}
+
+.header-container__brand {
+    color: rgb(141, 170, 255);
+    font-weight: 800;
+    font-size: var(--font-2xl);
+}
+
+.header-container__nav {
+    max-width: var(--container-lg);
+    padding: var(--size-4);
+    display: flex;
+    align-items: center;
+    gap: var(--size-4);
+}
+
+.nav__link {
+    color: #a0aec0;
+    font-family: sans-serif;
+    letter-spacing: var(--tracking-wide);
+}
