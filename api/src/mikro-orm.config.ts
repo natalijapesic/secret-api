@@ -8,17 +8,15 @@ if (dotenvConfig.error) {
   throw dotenvConfig.error;
 }
 
-const logger = new Logger('MikroORM');
 const config: Options = {
   entities: [User, Exam],
   dbName: 'secret-exam',
   host: 'localhost',
   type: 'postgresql',
   port: 5432,
-  name: "postgres",
-  password: "Albis123",
-  debug: process.env.NODE_ENV === 'development',
-  logger: logger.log.bind(logger),
+  name: 'postgres',
+  password: 'Albis123',
+  debug: ['query', 'discovery', 'info'],
   verbose: true,
 };
 

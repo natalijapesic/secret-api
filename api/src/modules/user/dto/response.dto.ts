@@ -14,8 +14,6 @@ export class ResponseUserDto {
 
   public wallet?: string;
 
-  public name: string;
-
   @Length(4, 10)
   public username: string;
 }

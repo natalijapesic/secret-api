@@ -1,8 +1,13 @@
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/postgresql';
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Exam } from 'core/entities';
 import { IPFSService } from 'core/services/ipfs.service';
+import { SecretJsService } from 'core/services/secretjs.service';
 import { CreateExam } from 'modules/exam/dto/create-exam.dto';
 import { UpdateExam } from 'modules/exam/dto/update-exam.dto';
 import { UploadQuestions } from 'modules/user/dto/UploadQuestions';
@@ -13,6 +18,7 @@ export class ExamService {
     @InjectRepository(Exam)
     private readonly examRepository: EntityRepository<Exam>,
     private readonly ipfsService: IPFSService,
+    private readonly secretjsService: SecretJsService,
   ) {}
 
   async create(payload: CreateExam) {
@@ -25,6 +31,7 @@ export class ExamService {
   }
 
   async find() {
+    await this.secretjsService.saveExam({});
     return await this.examRepository.findAll();
   }
 
@@ -47,11 +54,16 @@ export class ExamService {
     return await this.examRepository.removeAndFlush(exam);
   }
 
-  async uploadQuestions(id: string, payload: UploadQuestions, walletAddres: string) {
+  async uploadQuestions(
+    id: string,
+    payload: UploadQuestions,
+    walletAddres: string,
+  ) {
     //validira da li uopste moze ova fja da se izvrsi na contract-u...samo query
-    const isParlament = "true";
+    const isParlament = 'true';
 
-    if(!isParlament) throw new BadRequestException("Wallet address is not parlament address");
+    if (!isParlament)
+      throw new BadRequestException('Wallet address is not parlament address');
 
     const exam = await this.examRepository.find(
       { id },

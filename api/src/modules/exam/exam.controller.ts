@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Logger,
 } from '@nestjs/common';
 import { CreateExam } from 'modules/exam/dto/create-exam.dto';
 import { UpdateExam } from 'modules/exam/dto/update-exam.dto';
@@ -22,6 +23,7 @@ export class ExamController {
 
   @Get()
   find() {
+    Logger.debug('HERE');
     return this.examService.find();
   }
 
