@@ -14,9 +14,6 @@ export class User extends BaseEntity<User, 'id'> {
   id: string = uuidv4();
 
   @Property()
-  name!: string;
-
-  @Property()
   @Unique()
   username: string;
 
