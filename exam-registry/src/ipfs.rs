@@ -4,5 +4,5 @@ use serde::{Deserialize, Serialize};
 pub struct IpfsInfo {
     pub path: String,
     pub secret: String,
-    pub iv: String
+    pub iv: String,
 }

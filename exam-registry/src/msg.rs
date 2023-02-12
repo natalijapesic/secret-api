@@ -1,13 +1,13 @@
 use cosmwasm_std::Timestamp;
+use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
-use crate::{
-    ipfs::IpfsInfo,
-    merkle_tree::{MerkleAuth, MerkleTreeInfo},
-};
+use crate::{ipfs::IpfsInfo, merkle_tree::MerkleAuth};
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
-pub struct InstantiateMsg {}
+pub struct InstantiateMsg {
+    name: String,
+}
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
@@ -23,18 +23,7 @@ pub enum ExecuteMsg {
     SaveExam {
         course_id: u64,
         start_time: Timestamp,
-        orgs: MerkleTreeInfo,
+        // orgs: MerkleTreeInfo,
         ipfs: IpfsInfo,
     },
-}
-
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
-#[serde(rename_all = "snake_case")]
-pub enum QueryMsg {
-    // ParlamentCheck {},
-}
-
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
-pub struct ParlamentResponse {
-    pub is_parlament: bool,
 }

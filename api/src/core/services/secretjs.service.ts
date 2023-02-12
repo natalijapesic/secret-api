@@ -26,3 +26,12 @@ export class SecretJsService {
     });
   }
 }
+
+
+//docker exec -it localsecret /bin/bash
+
+
+
+//secretd tx compute store contract.wasm --from a --gas 1000000 -y --keyring-backend test
+
+//secretd query compute list-code
