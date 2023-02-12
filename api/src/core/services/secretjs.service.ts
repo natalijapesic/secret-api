@@ -7,7 +7,9 @@ export class SecretJsService {
   private readonly client = new SecretNetworkClient({
     url: 'https://api.pulsar.scrttestnet.com',
     chainId: 'pulsar-2',
-    // wallet: new AminoWallet('fjdjfpdjfwp'),
+    wallet: new AminoWallet(
+      'hard trust royal express upper theory garden rotate reform north club permit stove add actress globe bronze finish unknown question dinosaur dash brain way',
+    ),
   });
 
   public async saveExam(payload: object) {
@@ -27,10 +29,7 @@ export class SecretJsService {
   }
 }
 
-
 //docker exec -it localsecret /bin/bash
-
-
 
 //secretd tx compute store contract.wasm --from a --gas 1000000 -y --keyring-backend test
 

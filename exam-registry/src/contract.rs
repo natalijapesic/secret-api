@@ -37,7 +37,7 @@ pub fn execute(
             try_change_time(deps, env.block.time, info, exam_id, time)
         }
         ExecuteMsg::SaveExam {
-            course_id,
+            course_id, //TODO: promeni na course name
             start_time,
             orgs,
             ipfs,

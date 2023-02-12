@@ -1,6 +1,8 @@
 import axios from "axios";
 import { Wallet, SecretNetworkClient } from "secretjs";
 import fs from "fs";
+import sha256 from "crypto-js/sha256";
+import MerkleTree from "merkletreejs";
 
 // Returns a client with which we can interact with secret network
 const initializeClient = async (endpoint: string, chainId: string) => {
@@ -28,7 +30,6 @@ const initializeContract = async (
 ) => {
   const wasmCode = fs.readFileSync(contractPath);
   console.log("Uploading contract");
-  console.log(wasmCode.length);
 
   const uploadReceipt = await client.tx.compute.storeCode(
     {
@@ -147,6 +148,35 @@ async function initializeAndUploadContract() {
     contractAddress,
   ];
   return clientInfo;
+}
+
+const generateTree = (leaves: string[]): MerkleTree => {
+  const tree = new MerkleTree(leaves, sha256, { hashLeaves: true });
+
+  return tree;
+};
+
+async function saveExamTx(
+  client: SecretNetworkClient,
+  contractHash: string,
+  contractAddess: string
+) {
+  const tx = await client.tx.compute.executeContract({
+    sender: client.address,
+    contract_address: contractAddess,
+    code_hash: contractHash,
+    msg: {
+      save_exam: {
+        course_id: 12,
+        start_time: 1678627122,
+        orgs: {
+          root: generateTree(["a", "b", "c"]).getRoot(),
+          leaves_count: 3,
+        },
+        ipfs: { path: "path", secret: "secret", iv: "iv" },
+      },
+    },
+  });
 }
 
 async function runTestFunction(
