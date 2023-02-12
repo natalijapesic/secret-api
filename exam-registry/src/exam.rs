@@ -1,5 +1,5 @@
-use crate::{ipfs::IpfsInfo};
-use cosmwasm_std::{Timestamp};
+use crate::{ipfs::IpfsInfo, merkle_tree::MerkleTreeInfo};
+use cosmwasm_std::Timestamp;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -7,16 +7,15 @@ pub struct Exam {
     pub id: u64,
     pub course_id: u64,
     pub start_time: Timestamp,
-    // pub orgs: MerkleTreeInfo,
+    pub orgs: MerkleTreeInfo,
     pub ipfs: IpfsInfo,
 }
-
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct RequestExam {
     pub course_id: u64,
     pub start_time: Timestamp,
-    // pub orgs: MerkleTreeInfo,
+    pub orgs: MerkleTreeInfo,
     pub ipfs: IpfsInfo,
 }
 impl Exam {
@@ -24,14 +23,14 @@ impl Exam {
         id: u64,
         course_id: u64,
         start_time: Timestamp,
-        // orgs: MerkleTreeInfo,
+        orgs: MerkleTreeInfo,
         ipfs: IpfsInfo,
     ) -> Self {
         Self {
             id,
             course_id,
             start_time,
-            // orgs,
+            orgs,
             ipfs,
         }
     }

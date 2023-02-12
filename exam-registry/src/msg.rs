@@ -1,8 +1,10 @@
 use cosmwasm_std::Timestamp;
-use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
-use crate::{ipfs::IpfsInfo, merkle_tree::MerkleAuth};
+use crate::{
+    ipfs::IpfsInfo,
+    merkle_tree::{MerkleAuth, MerkleTreeInfo},
+};
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
 pub struct InstantiateMsg {
@@ -23,7 +25,7 @@ pub enum ExecuteMsg {
     SaveExam {
         course_id: u64,
         start_time: Timestamp,
-        // orgs: MerkleTreeInfo,
+        orgs: MerkleTreeInfo,
         ipfs: IpfsInfo,
     },
 }

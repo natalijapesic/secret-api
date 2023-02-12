@@ -1,12 +1,11 @@
-use std::any::type_name;
+use crate::exam::{Exam, RequestExam};
 use cosmwasm_std::{from_binary, to_binary, StdError, StdResult, Storage, Timestamp};
 use serde::{de::DeserializeOwned, Serialize};
-use crate::exam::{Exam, RequestExam};
+use std::any::type_name;
 
 pub const PARLAMENT_ID: &[u8] = b"parlament";
 pub const EXAM_NAMESPACE: &[u8] = b"exams";
 pub const EXAMS_ID_COUNTER: &[u8] = b"exams:counter";
-
 
 fn concat(namespace: &[u8], key: &[u8]) -> Vec<u8> {
     let mut k = namespace.to_vec();
@@ -36,7 +35,7 @@ pub fn add_exam(storage: &mut dyn Storage, request: RequestExam) -> StdResult<()
         counter,
         request.course_id,
         request.start_time,
-        // request.orgs,
+        request.orgs,
         request.ipfs,
     );
     save(
