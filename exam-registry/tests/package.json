@@ -9,6 +9,7 @@
   "dependencies": {
     "assert": "^2.0.0",
     "crypto-js": "^4.1.1",
+    "fast-text-encoding": "^1.0.6",
     "fs": "^0.0.1-security",
     "merkletreejs": "^0.3.9"
   }

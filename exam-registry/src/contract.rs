@@ -1,13 +1,13 @@
 use crate::{
-    exam::RequestExam,
+    exam::{RequestExam},
     ipfs::IpfsInfo,
     merkle_tree::{MerkleAuth, MerkleTreeInfo},
-    msg::{ExecuteMsg, InstantiateMsg},
+    msg::{ExecuteMsg, InstantiateMsg, QueryMsg},
     state::{add_exam, load_exam, update_exam, PARLAMENT_ID},
 };
 use cosmwasm_std::{
     entry_point, to_binary, Addr, DepsMut, Env, MessageInfo, Response, StdError, StdResult,
-    Timestamp,
+    Timestamp, Deps, Binary,
 };
 
 #[entry_point]
@@ -21,6 +21,15 @@ pub fn instantiate(
 
     Ok(Response::default())
 }
+
+
+#[entry_point]
+pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
+    match msg {
+        QueryMsg::GetExam {exam_id} => to_binary(&query_exam(deps, exam_id)?),
+    }
+}
+
 
 #[entry_point]
 pub fn execute(
@@ -37,12 +46,19 @@ pub fn execute(
             try_change_time(deps, env.block.time, info, exam_id, time)
         }
         ExecuteMsg::SaveExam {
-            course_id, //TODO: promeni na course name
+            course_name, 
             start_time,
             orgs,
             ipfs,
-        } => try_save_exam(deps, info, course_id, start_time, orgs, ipfs), //parlament
+        } => try_save_exam(deps, info, course_name, start_time, orgs, ipfs), 
     }
+}
+
+
+fn query_exam(deps: Deps, exam_id: u64) -> StdResult<IpfsInfo>{
+
+    let exam = load_exam(deps.storage, exam_id)?;
+    Ok(exam.ipfs)
 }
 
 pub fn validate_parlament(deps: &DepsMut, sender: Addr) -> Result<Response, StdError> {
@@ -92,18 +108,19 @@ pub fn try_start_exam(
 pub fn try_save_exam(
     deps: DepsMut,
     info: MessageInfo,
-    course_id: u64,
+    course_name: String,
     start_time: Timestamp,
     orgs: MerkleTreeInfo,
     ipfs: IpfsInfo,
 ) -> Result<Response, StdError> {
     validate_parlament(&deps, info.sender)?;
     let request = RequestExam {
-        course_id,
+        course_name,
         start_time,
         orgs,
         ipfs,
     };
-    add_exam(deps.storage, request)?;
-    Ok(Response::new())
+
+    let exam_id: u64 = add_exam(deps.storage, request)?;
+    Ok(Response::new().set_data(to_binary(&exam_id)?))
 }

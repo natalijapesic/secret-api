@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct Exam {
     pub id: u64,
-    pub course_id: u64,
+    pub course_name: String,
     pub start_time: Timestamp,
     pub orgs: MerkleTreeInfo,
     pub ipfs: IpfsInfo,
@@ -13,22 +13,23 @@ pub struct Exam {
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct RequestExam {
-    pub course_id: u64,
+    pub course_name: String,
     pub start_time: Timestamp,
     pub orgs: MerkleTreeInfo,
     pub ipfs: IpfsInfo,
 }
+
 impl Exam {
     pub fn new(
         id: u64,
-        course_id: u64,
+        course_name: String,
         start_time: Timestamp,
         orgs: MerkleTreeInfo,
         ipfs: IpfsInfo,
     ) -> Self {
         Self {
             id,
-            course_id,
+            course_name,
             start_time,
             orgs,
             ipfs,

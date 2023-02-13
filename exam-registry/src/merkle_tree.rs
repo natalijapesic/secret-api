@@ -1,14 +1,15 @@
 use cosmwasm_std::{Addr, Binary, Uint128};
 use rs_merkle::{algorithms::Sha256, Hasher, MerkleProof};
+use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, JsonSchema)]
 pub struct MerkleAuth {
     pub proof: Vec<Binary>,
     pub index: Uint128,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq, JsonSchema)]
 pub struct MerkleTreeInfo {
     pub root: [u8; 32],
     pub leaves_count: Uint128,
@@ -58,6 +59,8 @@ mod test {
         .map(|x| Sha256::hash(x.as_bytes()))
         .collect::<Vec<[u8; 32]>>();
 
+
+
         let leavess = [Addr::unchecked("b"), Addr::unchecked("c")]
             .into_iter()
             .map(|x| Sha256::hash(x.as_bytes()))
@@ -65,10 +68,12 @@ mod test {
             .collect::<Vec<Binary>>();
 
         let merkle_tree = MerkleTree::<Sha256>::from_leaves(&leaves);
+
         let merkle_root = merkle_tree
             .root()
             .ok_or("couldn't get the merkle root")
             .unwrap();
+
 
         let auth = MerkleTreeInfo {
             root: merkle_root,

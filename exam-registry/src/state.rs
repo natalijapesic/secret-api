@@ -26,14 +26,14 @@ pub fn load<T: DeserializeOwned>(storage: &dyn Storage, key: &[u8]) -> StdResult
     ))
 }
 
-pub fn add_exam(storage: &mut dyn Storage, request: RequestExam) -> StdResult<()> {
+pub fn add_exam(storage: &mut dyn Storage, request: RequestExam) -> StdResult<u64> {
     let mut counter: u64 = load(storage, EXAMS_ID_COUNTER).unwrap_or(0);
 
     counter += 1;
 
     let exam = Exam::new(
         counter,
-        request.course_id,
+        request.course_name,
         request.start_time,
         request.orgs,
         request.ipfs,
@@ -44,7 +44,7 @@ pub fn add_exam(storage: &mut dyn Storage, request: RequestExam) -> StdResult<()
         &exam,
     )?;
 
-    Ok(())
+    Ok(counter)
 }
 
 pub fn update_exam(storage: &mut dyn Storage, time: Timestamp, exam_id: u64) -> StdResult<()> {

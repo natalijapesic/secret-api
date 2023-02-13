@@ -1,14 +1,12 @@
 import axios from "axios";
-import { Wallet, SecretNetworkClient } from "secretjs";
+import { Wallet, SecretNetworkClient, fromUtf8 } from "secretjs";
 import fs from "fs";
-import sha256 from "crypto-js/sha256";
+import SHA256 from "crypto-js/sha256";
 import MerkleTree from "merkletreejs";
 
 // Returns a client with which we can interact with secret network
 const initializeClient = async (endpoint: string, chainId: string) => {
-  const wallet = new Wallet(
-    "hard trust royal express upper theory garden rotate reform north club permit stove add actress globe bronze finish unknown question dinosaur dash brain way"
-  ); // Use default constructor of wallet to generate random mnemonic.
+  const wallet = new Wallet(); // Use default constructor of wallet to generate random mnemonic.
   const accAddress = wallet.address;
   const client = new SecretNetworkClient({
     // Create a client to interact with the network
@@ -19,6 +17,8 @@ const initializeClient = async (endpoint: string, chainId: string) => {
   });
 
   console.log(`Initialized client with wallet address: ${accAddress}`);
+
+  await fillUpFromFaucet(client, 3);
 
   return client;
 };
@@ -99,7 +99,7 @@ const initializeContract = async (
 };
 
 const getFromFaucet = async (address: string) => {
-  await axios.get(`https://faucet.pulsar.scrttestnet.com?address=${address}`);
+  await axios.get(`http://localhost:5000/faucet?address=${address}`);
 };
 
 async function getScrtBalance(userCli: SecretNetworkClient): Promise<string> {
@@ -132,8 +132,8 @@ async function fillUpFromFaucet(
 
 // Initialization procedure
 async function initializeAndUploadContract() {
-  let endpoint = "https://api.pulsar.scrttestnet.com";
-  let chainId = "pulsar-2";
+  let endpoint = "http://localhost:1317";
+  let chainId = "secretdev-1";
 
   const client = await initializeClient(endpoint, chainId);
 
@@ -150,10 +150,11 @@ async function initializeAndUploadContract() {
   return clientInfo;
 }
 
-const generateTree = (leaves: string[]): MerkleTree => {
-  const tree = new MerkleTree(leaves, sha256, { hashLeaves: true });
-
-  return tree;
+const generateRoot = (array: string[]) => {
+  const leaves = array.map((x) => SHA256(x));
+  const tree = new MerkleTree(leaves, SHA256);
+  const root = tree.getRoot();
+  return root;
 };
 
 async function saveExamTx(
@@ -161,22 +162,67 @@ async function saveExamTx(
   contractHash: string,
   contractAddess: string
 ) {
-  const tx = await client.tx.compute.executeContract({
-    sender: client.address,
-    contract_address: contractAddess,
-    code_hash: contractHash,
-    msg: {
-      save_exam: {
-        course_id: 12,
-        start_time: 1678627122,
-        orgs: {
-          root: generateTree(["a", "b", "c"]).getRoot(),
-          leaves_count: 3,
+  const root = generateRoot(["a", "b", "c"]);
+
+  console.log(root.toJSON().data);
+
+  const tx = await client.tx.compute.executeContract(
+    {
+      sender: client.address,
+      contract_address: contractAddess,
+      code_hash: contractHash,
+      msg: {
+        save_exam: {
+          course_name: "Math",
+          start_time: "1678627122",
+          orgs: {
+            root: root.toJSON().data,
+            leaves_count: "3",
+          },
+          ipfs: { path: "path", secret: "secret", iv: "iv" },
         },
-        ipfs: { path: "path", secret: "secret", iv: "iv" },
       },
+      sent_funds: [],
     },
+    {
+      gasLimit: 200000,
+    }
+  );
+
+  console.log(tx.rawLog);
+
+  let parsedTransactionData = fromUtf8(tx.data[0]);
+  console.log("save exam", parsedTransactionData);
+  console.log(`Save exam TX used ${tx.gasUsed} gas`);
+  return parsedTransactionData;
+}
+
+type ExamResponse = { path: string; secret: string; iv: string };
+
+async function queryExam(
+  client: SecretNetworkClient,
+  contractHash: string,
+  contractAddress: string
+): Promise<ExamResponse> {
+  const examResponse: ExamResponse = await client.query.compute.queryContract({
+    contract_address: contractAddress,
+    code_hash: contractHash,
+    query: { get_exam: { exam_id: 2 } },
   });
+
+  return examResponse;
+}
+
+async function test_save_exam(
+  client: SecretNetworkClient,
+  contractHash: string,
+  contractAddress: string
+) {
+  await saveExamTx(client, contractHash, contractAddress);
+
+  const response = await queryExam(client, contractHash, contractAddress);
+
+  console.log("Exam response", response);
 }
 
 async function runTestFunction(
@@ -197,4 +243,6 @@ async function runTestFunction(
 (async () => {
   const [client, contractHash, contractAddress] =
     await initializeAndUploadContract();
+
+  await runTestFunction(test_save_exam, client, contractHash, contractAddress);
 })();

@@ -1,0 +1,171 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ExecuteMsg",
+  "oneOf": [
+    {
+      "type": "object",
+      "required": [
+        "change_time"
+      ],
+      "properties": {
+        "change_time": {
+          "type": "object",
+          "required": [
+            "exam_id",
+            "time"
+          ],
+          "properties": {
+            "exam_id": {
+              "type": "integer",
+              "format": "uint64",
+              "minimum": 0.0
+            },
+            "time": {
+              "$ref": "#/definitions/Timestamp"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "start_exam"
+      ],
+      "properties": {
+        "start_exam": {
+          "type": "object",
+          "required": [
+            "auth",
+            "exam_id"
+          ],
+          "properties": {
+            "auth": {
+              "$ref": "#/definitions/MerkleAuth"
+            },
+            "exam_id": {
+              "type": "integer",
+              "format": "uint64",
+              "minimum": 0.0
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "save_exam"
+      ],
+      "properties": {
+        "save_exam": {
+          "type": "object",
+          "required": [
+            "course_name",
+            "ipfs",
+            "orgs",
+            "start_time"
+          ],
+          "properties": {
+            "course_name": {
+              "type": "string"
+            },
+            "ipfs": {
+              "$ref": "#/definitions/IpfsInfo"
+            },
+            "orgs": {
+              "$ref": "#/definitions/MerkleTreeInfo"
+            },
+            "start_time": {
+              "$ref": "#/definitions/Timestamp"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  ],
+  "definitions": {
+    "Binary": {
+      "description": "Binary is a wrapper around Vec<u8> to add base64 de/serialization with serde. It also adds some helper methods to help encode inline.\n\nThis is only needed as serde-json-{core,wasm} has a horrible encoding for Vec<u8>",
+      "type": "string"
+    },
+    "IpfsInfo": {
+      "type": "object",
+      "required": [
+        "iv",
+        "path",
+        "secret"
+      ],
+      "properties": {
+        "iv": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "secret": {
+          "type": "string"
+        }
+      }
+    },
+    "MerkleAuth": {
+      "type": "object",
+      "required": [
+        "index",
+        "proof"
+      ],
+      "properties": {
+        "index": {
+          "$ref": "#/definitions/Uint128"
+        },
+        "proof": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Binary"
+          }
+        }
+      }
+    },
+    "MerkleTreeInfo": {
+      "type": "object",
+      "required": [
+        "leaves_count",
+        "root"
+      ],
+      "properties": {
+        "leaves_count": {
+          "$ref": "#/definitions/Uint128"
+        },
+        "root": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "uint8",
+            "minimum": 0.0
+          },
+          "maxItems": 32,
+          "minItems": 32
+        }
+      }
+    },
+    "Timestamp": {
+      "description": "A point in time in nanosecond precision.\n\nThis type can represent times from 1970-01-01T00:00:00Z to 2554-07-21T23:34:33Z.\n\n## Examples\n\n``` # use cosmwasm_std::Timestamp; let ts = Timestamp::from_nanos(1_000_000_202); assert_eq!(ts.nanos(), 1_000_000_202); assert_eq!(ts.seconds(), 1); assert_eq!(ts.subsec_nanos(), 202);\n\nlet ts = ts.plus_seconds(2); assert_eq!(ts.nanos(), 3_000_000_202); assert_eq!(ts.seconds(), 3); assert_eq!(ts.subsec_nanos(), 202); ```",
+      "allOf": [
+        {
+          "$ref": "#/definitions/Uint64"
+        }
+      ]
+    },
+    "Uint128": {
+      "description": "A thin wrapper around u128 that is using strings for JSON encoding/decoding, such that the full u128 range can be used for clients that convert JSON numbers to floats, like JavaScript and jq.\n\n# Examples\n\nUse `from` to create instances of this and `u128` to get the value out:\n\n``` # use cosmwasm_std::Uint128; let a = Uint128::from(123u128); assert_eq!(a.u128(), 123);\n\nlet b = Uint128::from(42u64); assert_eq!(b.u128(), 42);\n\nlet c = Uint128::from(70u32); assert_eq!(c.u128(), 70); ```",
+      "type": "string"
+    },
+    "Uint64": {
+      "description": "A thin wrapper around u64 that is using strings for JSON encoding/decoding, such that the full u64 range can be used for clients that convert JSON numbers to floats, like JavaScript and jq.\n\n# Examples\n\nUse `from` to create instances of this and `u64` to get the value out:\n\n``` # use cosmwasm_std::Uint64; let a = Uint64::from(42u64); assert_eq!(a.u64(), 42);\n\nlet b = Uint64::from(70u32); assert_eq!(b.u64(), 70); ```",
+      "type": "string"
+    }
+  }
+}
