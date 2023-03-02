@@ -1,4 +1,4 @@
-use cosmwasm_std::Timestamp;
+use cosmwasm_std::{Addr, Timestamp};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
@@ -9,7 +9,7 @@ use crate::{
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct InstantiateMsg {
-    pub name: String,
+    pub parlament: Vec<Addr>,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
@@ -29,20 +29,20 @@ pub enum ExecuteMsg {
         orgs: MerkleTreeInfo,
         ipfs: IpfsInfo,
     },
+    ValidateExam {
+        exam_id: u64,
+    },
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, Eq, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum QueryMsg {
-    GetExam {
-        exam_id:u64
-    },
+    GetExam { exam_id: u64 },
 }
-
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct ExamResponse {
     pub exam_id: u64,
     pub ipfs: IpfsInfo,
-    pub exam_time: Timestamp
+    pub exam_time: Timestamp,
 }

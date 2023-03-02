@@ -93,7 +93,7 @@ const initializeContract = async (
     {
       sender: client.address,
       code_id: codeId,
-      init_msg: { name: "test" },
+      init_msg: { parlament: [client.address, client.address] },
       code_hash: contractCodeHash,
       label: "My contract" + Math.ceil(Math.random() * 10000),
     },
@@ -179,7 +179,6 @@ const generateRoot = (array: string[]) => {
   merkleData.proof = proof.map((single) => single.toJSON().data);
   const root = tree.getRoot();
   merkleData.root = root.toJSON().data;
-
 };
 
 async function saveExamTx(
@@ -213,7 +212,7 @@ async function saveExamTx(
       gasLimit: 200000,
     }
   );
-
+  console.log(tx.rawLog);
   console.log(fromUtf8(tx.data[0]));
 
   const parsedTransactionData = fromUtf8(tx.data[0]);
@@ -229,7 +228,6 @@ async function startExamTx(
   contractHash: string,
   contractAddess: string
 ): Promise<ExamResponse> {
-
   const tx = await client.tx.compute.executeContract(
     {
       sender: client.address,

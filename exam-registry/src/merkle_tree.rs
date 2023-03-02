@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, JsonSchema)]
 pub struct MerkleAuth {
-    pub proof: Vec<[u8;32]>,
+    pub proof: Vec<[u8; 32]>,
     pub index: Uint128,
 }
 
@@ -27,7 +27,6 @@ impl MerkleTreeInfo {
     }
 
     pub fn validate(&self, sender: &Addr, merkle_auth: MerkleAuth) -> bool {
-
         let proof = MerkleProof::<Sha256>::new(merkle_auth.proof);
         let leaf_heashes = &[Sha256::hash(sender.as_bytes())];
 
@@ -42,7 +41,7 @@ impl MerkleTreeInfo {
 
 #[cfg(test)]
 mod test {
-    use cosmwasm_std::{Addr, Binary, Uint128};
+    use cosmwasm_std::{Addr, Uint128};
     use rs_merkle::{algorithms::Sha256, Hasher, MerkleTree};
 
     use crate::merkle_tree::{MerkleAuth, MerkleTreeInfo};
@@ -58,12 +57,10 @@ mod test {
         .map(|x| Sha256::hash(x.as_bytes()))
         .collect::<Vec<[u8; 32]>>();
 
-
-
         let leavess = [Addr::unchecked("b"), Addr::unchecked("c")]
             .into_iter()
             .map(|x| Sha256::hash(x.as_bytes()))
-            .collect::<Vec<[u8;32]>>();
+            .collect::<Vec<[u8; 32]>>();
 
         let merkle_tree = MerkleTree::<Sha256>::from_leaves(&leaves);
 
@@ -71,7 +68,6 @@ mod test {
             .root()
             .ok_or("couldn't get the merkle root")
             .unwrap();
-
 
         let auth = MerkleTreeInfo {
             root: merkle_root,
@@ -89,4 +85,3 @@ mod test {
         ));
     }
 }
-

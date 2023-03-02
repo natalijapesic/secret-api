@@ -9,6 +9,8 @@ pub struct Exam {
     pub start_time: Timestamp,
     pub orgs: MerkleTreeInfo,
     pub ipfs: IpfsInfo,
+    pub is_validate: bool,
+
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -33,6 +35,7 @@ impl Exam {
             start_time,
             orgs,
             ipfs,
+            is_validate: false
         }
     }
 }
