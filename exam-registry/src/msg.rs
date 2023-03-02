@@ -9,7 +9,7 @@ use crate::{
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct InstantiateMsg {
-    name: String,
+    pub name: String,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
@@ -37,4 +37,12 @@ pub enum QueryMsg {
     GetExam {
         exam_id:u64
     },
+}
+
+
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+pub struct ExamResponse {
+    pub exam_id: u64,
+    pub ipfs: IpfsInfo,
+    pub exam_time: Timestamp
 }

@@ -1,11 +1,11 @@
-use cosmwasm_std::{Addr, Binary, Uint128};
+use cosmwasm_std::{Addr, Uint128};
 use rs_merkle::{algorithms::Sha256, Hasher, MerkleProof};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, JsonSchema)]
 pub struct MerkleAuth {
-    pub proof: Vec<Binary>,
+    pub proof: Vec<[u8;32]>,
     pub index: Uint128,
 }
 
@@ -15,11 +15,11 @@ pub struct MerkleTreeInfo {
     pub leaves_count: Uint128,
 }
 
-fn convert(b: Vec<Binary>) -> Vec<[u8; 32]> {
-    b.into_iter()
-        .map(|x: Binary| x.to_array().unwrap())
-        .collect()
-}
+// fn convert(b: Vec<Binary>) -> Vec<[u8; 32]> {
+//     b.into_iter()
+//         .map(|x: Binary| x.to_array().unwrap())
+//         .collect()
+// }
 
 impl MerkleTreeInfo {
     pub fn new(root: [u8; 32], leaves_count: Uint128) -> Self {
@@ -27,9 +27,8 @@ impl MerkleTreeInfo {
     }
 
     pub fn validate(&self, sender: &Addr, merkle_auth: MerkleAuth) -> bool {
-        let proof_des = convert(merkle_auth.proof);
 
-        let proof = MerkleProof::<Sha256>::new(proof_des);
+        let proof = MerkleProof::<Sha256>::new(merkle_auth.proof);
         let leaf_heashes = &[Sha256::hash(sender.as_bytes())];
 
         proof.verify(
@@ -64,8 +63,7 @@ mod test {
         let leavess = [Addr::unchecked("b"), Addr::unchecked("c")]
             .into_iter()
             .map(|x| Sha256::hash(x.as_bytes()))
-            .map(|y| Binary::from(y))
-            .collect::<Vec<Binary>>();
+            .collect::<Vec<[u8;32]>>();
 
         let merkle_tree = MerkleTree::<Sha256>::from_leaves(&leaves);
 
@@ -80,6 +78,8 @@ mod test {
             leaves_count: Uint128::new(3 as u128),
         };
 
+        println!("proof {:?}", leavess);
+
         assert!(auth.validate(
             &Addr::unchecked("a"),
             MerkleAuth {
@@ -89,3 +89,4 @@ mod test {
         ));
     }
 }
+

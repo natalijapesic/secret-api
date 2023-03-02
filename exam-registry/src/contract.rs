@@ -2,7 +2,7 @@ use crate::{
     exam::{RequestExam},
     ipfs::IpfsInfo,
     merkle_tree::{MerkleAuth, MerkleTreeInfo},
-    msg::{ExecuteMsg, InstantiateMsg, QueryMsg},
+    msg::{ExecuteMsg, InstantiateMsg, QueryMsg, ExamResponse},
     state::{add_exam, load_exam, update_exam, PARLAMENT_ID},
 };
 use cosmwasm_std::{
@@ -55,10 +55,10 @@ pub fn execute(
 }
 
 
-fn query_exam(deps: Deps, exam_id: u64) -> StdResult<IpfsInfo>{
+fn query_exam(deps: Deps, exam_id: u64) -> StdResult<ExamResponse>{
 
     let exam = load_exam(deps.storage, exam_id)?;
-    Ok(exam.ipfs)
+    Ok(ExamResponse{exam_id: exam.id, ipfs: exam.ipfs, exam_time: exam.start_time})
 }
 
 pub fn validate_parlament(deps: &DepsMut, sender: Addr) -> Result<Response, StdError> {
@@ -78,12 +78,13 @@ pub fn try_change_time(
 ) -> Result<Response, StdError> {
     validate_parlament(&deps, info.sender)?;
 
-    if current_time.gt(&time) {
+
+    if current_time.gt(&Timestamp::from_seconds(time.nanos())) {
         return Err(StdError::generic_err("Invalid time"));
     }
 
-    update_exam(deps.storage, time, exam_id)?;
-    Ok(Response::new())
+    let response = update_exam(deps.storage, time, exam_id)?;
+    Ok(Response::new().set_data(to_binary(&response)?))
 }
 
 pub fn try_start_exam(
@@ -95,14 +96,15 @@ pub fn try_start_exam(
 ) -> Result<Response, StdError> {
     let exam = load_exam(deps.storage, exam_id)?;
 
-    if exam.orgs.validate(&info.sender, auth) {
+    if !exam.orgs.validate(&info.sender, auth) {
         return Err(StdError::generic_err("Not a valid org."));
     }
 
-    if exam.start_time.lt(&current_time) || exam.start_time.plus_seconds(600).gt(&current_time) {
-        return Err(StdError::generic_err("Invalid time. "));
-    }
-    Ok(Response::new().set_data(to_binary(&exam.ipfs)?))
+    // if exam.start_time.lt(&current_time.plus_seconds(1)) || exam.start_time.plus_seconds(600).lt(&current_time.plus_seconds(1)) {
+    //     return Err(StdError::generic_err("Invalid time. "));
+    // }
+
+    Ok(Response::new().set_data(to_binary(&ExamResponse{exam_id, ipfs: exam.ipfs, exam_time:exam.start_time})?))
 }
 
 pub fn try_save_exam(
@@ -121,6 +123,6 @@ pub fn try_save_exam(
         ipfs,
     };
 
-    let exam_id: u64 = add_exam(deps.storage, request)?;
-    Ok(Response::new().set_data(to_binary(&exam_id)?))
+    let response = add_exam(deps.storage, request)?;
+    Ok(Response::new().set_data(to_binary(&response)?))
 }

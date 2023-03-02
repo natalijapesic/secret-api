@@ -4,6 +4,26 @@ import fs from "fs";
 import SHA256 from "crypto-js/sha256";
 import MerkleTree from "merkletreejs";
 
+type IpfsResponse = { path: string; secret: string; iv: string };
+
+type ExamResponse = {
+  exam_id: number;
+  exam_time: string;
+  ipfs: IpfsResponse;
+};
+
+type MerkleData = {
+  root: number[];
+  proof: number[][] | null;
+  index: string;
+};
+
+const merkleData: MerkleData = {
+  root: [],
+  index: "0",
+  proof: [[0]],
+};
+
 // Returns a client with which we can interact with secret network
 const initializeClient = async (endpoint: string, chainId: string) => {
   const wallet = new Wallet(); // Use default constructor of wallet to generate random mnemonic.
@@ -73,9 +93,9 @@ const initializeContract = async (
     {
       sender: client.address,
       code_id: codeId,
-      init_msg: { name: "test" }, // Initialize our counter to start from 4. This message will trigger our Init function
+      init_msg: { name: "test" },
       code_hash: contractCodeHash,
-      label: "My contract" + Math.ceil(Math.random() * 10000), // The label should be unique for every contract, add random string in order to maintain uniqueness
+      label: "My contract" + Math.ceil(Math.random() * 10000),
     },
     {
       gasLimit: 1000000,
@@ -114,6 +134,7 @@ async function getScrtBalance(userCli: SecretNetworkClient): Promise<string> {
 
   return balanceResponse.balance.amount;
 }
+
 async function fillUpFromFaucet(
   client: SecretNetworkClient,
   targetBalance: Number
@@ -153,18 +174,22 @@ async function initializeAndUploadContract() {
 const generateRoot = (array: string[]) => {
   const leaves = array.map((x) => SHA256(x));
   const tree = new MerkleTree(leaves, SHA256);
+  const leaf = SHA256(array[0]);
+  const proof = tree.getProof(leaf as any).map((p) => p.data);
+  merkleData.proof = proof.map((single) => single.toJSON().data);
   const root = tree.getRoot();
-  return root;
+  merkleData.root = root.toJSON().data;
+
 };
 
 async function saveExamTx(
   client: SecretNetworkClient,
   contractHash: string,
   contractAddess: string
-) {
-  const root = generateRoot(["a", "b", "c"]);
-
-  console.log(root.toJSON().data);
+): Promise<ExamResponse> {
+  const org1 = new Wallet();
+  const org2 = new Wallet();
+  generateRoot([client.address, org1.address, org2.address]);
 
   const tx = await client.tx.compute.executeContract(
     {
@@ -176,7 +201,7 @@ async function saveExamTx(
           course_name: "Math",
           start_time: "1678627122",
           orgs: {
-            root: root.toJSON().data,
+            root: merkleData.root,
             leaves_count: "3",
           },
           ipfs: { path: "path", secret: "secret", iv: "iv" },
@@ -189,25 +214,117 @@ async function saveExamTx(
     }
   );
 
-  console.log(tx.rawLog);
+  console.log(fromUtf8(tx.data[0]));
 
-  let parsedTransactionData = fromUtf8(tx.data[0]);
+  const parsedTransactionData = fromUtf8(tx.data[0]);
   console.log("save exam", parsedTransactionData);
   console.log(`Save exam TX used ${tx.gasUsed} gas`);
-  return parsedTransactionData;
+  console.log("Exam tx response", parsedTransactionData);
+
+  return JSON.parse(parsedTransactionData.replace("Y", "")) as ExamResponse;
 }
 
-type ExamResponse = { path: string; secret: string; iv: string };
+async function startExamTx(
+  client: SecretNetworkClient,
+  contractHash: string,
+  contractAddess: string
+): Promise<ExamResponse> {
+
+  const tx = await client.tx.compute.executeContract(
+    {
+      sender: client.address,
+      contract_address: contractAddess,
+      code_hash: contractHash,
+      msg: {
+        start_exam: {
+          exam_id: 1,
+          auth: {
+            index: merkleData.index,
+            proof: merkleData.proof,
+          },
+        },
+      },
+      sent_funds: [],
+    },
+    {
+      gasLimit: 200000,
+    }
+  );
+
+  console.log("raw log", tx.rawLog);
+
+  const parsedTransactionData = fromUtf8(tx.data[0]);
+  console.log("start exam", parsedTransactionData);
+  console.log(`start exam TX used ${tx.gasUsed} gas`);
+  console.log("Exam tx response", parsedTransactionData);
+
+  return JSON.parse(parsedTransactionData.replace("Y", "")) as ExamResponse;
+}
+
+async function test_start_exam(
+  client: SecretNetworkClient,
+  contractHash: string,
+  contractAddress: string
+) {
+  const exam_response = await startExamTx(
+    client,
+    contractHash,
+    contractAddress
+  );
+
+  const response = await queryExam(
+    client,
+    contractHash,
+    contractAddress,
+    exam_response.exam_id
+  );
+
+  console.log("Start exam response", response);
+}
+
+async function changeTimeTx(
+  client: SecretNetworkClient,
+  contractHash: string,
+  contractAddess: string
+): Promise<ExamResponse> {
+  const tx = await client.tx.compute.executeContract(
+    {
+      sender: client.address,
+      contract_address: contractAddess,
+      code_hash: contractHash,
+      msg: {
+        change_time: {
+          exam_id: 1,
+          time: "1681391404",
+        },
+      },
+      sent_funds: [],
+    },
+    {
+      gasLimit: 200000,
+    }
+  );
+
+  console.log(tx.rawLog);
+
+  const parsedTransactionData = fromUtf8(tx.data[0]);
+  console.log("save exam", parsedTransactionData);
+  console.log(`Save exam TX used ${tx.gasUsed} gas`);
+  console.log("Exam tx response", parsedTransactionData);
+
+  return JSON.parse(parsedTransactionData.replace("Y", "")) as ExamResponse;
+}
 
 async function queryExam(
   client: SecretNetworkClient,
   contractHash: string,
-  contractAddress: string
-): Promise<ExamResponse> {
-  const examResponse: ExamResponse = await client.query.compute.queryContract({
+  contractAddress: string,
+  exam_id: number
+): Promise<any> {
+  const examResponse = await client.query.compute.queryContract({
     contract_address: contractAddress,
     code_hash: contractHash,
-    query: { get_exam: { exam_id: 2 } },
+    query: { get_exam: { exam_id } },
   });
 
   return examResponse;
@@ -218,11 +335,37 @@ async function test_save_exam(
   contractHash: string,
   contractAddress: string
 ) {
-  await saveExamTx(client, contractHash, contractAddress);
+  const exam_response = await saveExamTx(client, contractHash, contractAddress);
 
-  const response = await queryExam(client, contractHash, contractAddress);
+  const response = await queryExam(
+    client,
+    contractHash,
+    contractAddress,
+    exam_response.exam_id
+  );
 
   console.log("Exam response", response);
+}
+
+async function test_change_time(
+  client: SecretNetworkClient,
+  contractHash: string,
+  contractAddress: string
+) {
+  const exam_response = await changeTimeTx(
+    client,
+    contractHash,
+    contractAddress
+  );
+
+  const response = await queryExam(
+    client,
+    contractHash,
+    contractAddress,
+    exam_response.exam_id
+  );
+
+  console.log("Change time exam response", response);
 }
 
 async function runTestFunction(
@@ -245,4 +388,12 @@ async function runTestFunction(
     await initializeAndUploadContract();
 
   await runTestFunction(test_save_exam, client, contractHash, contractAddress);
+  // await runTestFunction(
+  //   test_change_time,
+  //   client,
+  //   contractHash,
+  //   contractAddress
+  // );
+
+  await runTestFunction(test_start_exam, client, contractHash, contractAddress);
 })();

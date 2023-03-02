@@ -1,4 +1,4 @@
-use crate::exam::{Exam, RequestExam};
+use crate::{exam::{Exam, RequestExam}, msg::ExamResponse};
 use cosmwasm_std::{from_binary, to_binary, StdError, StdResult, Storage, Timestamp};
 use serde::{de::DeserializeOwned, Serialize};
 use std::any::type_name;
@@ -26,7 +26,7 @@ pub fn load<T: DeserializeOwned>(storage: &dyn Storage, key: &[u8]) -> StdResult
     ))
 }
 
-pub fn add_exam(storage: &mut dyn Storage, request: RequestExam) -> StdResult<u64> {
+pub fn add_exam(storage: &mut dyn Storage, request: RequestExam) -> StdResult<ExamResponse> {
     let mut counter: u64 = load(storage, EXAMS_ID_COUNTER).unwrap_or(0);
 
     counter += 1;
@@ -44,10 +44,12 @@ pub fn add_exam(storage: &mut dyn Storage, request: RequestExam) -> StdResult<u6
         &exam,
     )?;
 
-    Ok(counter)
+    save(storage, EXAMS_ID_COUNTER, &counter)?;
+
+    Ok(ExamResponse { exam_id:counter, ipfs: exam.ipfs, exam_time: exam.start_time })
 }
 
-pub fn update_exam(storage: &mut dyn Storage, time: Timestamp, exam_id: u64) -> StdResult<()> {
+pub fn update_exam(storage: &mut dyn Storage, time: Timestamp, exam_id: u64) -> StdResult<ExamResponse> {
     let mut exam = load_exam(storage, exam_id)?;
 
     exam.start_time = time;
@@ -58,7 +60,7 @@ pub fn update_exam(storage: &mut dyn Storage, time: Timestamp, exam_id: u64) -> 
         &exam,
     )?;
 
-    Ok(())
+    Ok(ExamResponse{exam_id, ipfs: exam.ipfs, exam_time: exam.start_time})
 }
 pub fn load_exam(storage: &dyn Storage, exam_id: u64) -> StdResult<Exam> {
     let exam = load(storage, &concat(EXAM_NAMESPACE, &exam_id.to_be_bytes()))?;
