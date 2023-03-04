@@ -35,7 +35,7 @@ export class User extends BaseEntity<User, 'id'> {
 }
 
 export enum Role {
-  Parlament = 'parlament',
+  Profesor = 'profesor',
   Student = 'student',
   Organization = 'organization',
 }

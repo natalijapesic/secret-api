@@ -31,8 +31,5 @@ export class Exam extends BaseEntity<Exam, 'id'> {
   locations: LocationInfo[];
 
   @ManyToMany(() => User)
-  students = new Collection<User>(this);
-
-  @ManyToMany(() => User)
-  organizations = new Collection<User>(this);
+  users = new Collection<User>(this);
 }

@@ -18,20 +18,19 @@ export class ExamService {
     @InjectRepository(Exam)
     private readonly examRepository: EntityRepository<Exam>,
     private readonly ipfsService: IPFSService,
-    private readonly secretjsService: SecretJsService,
   ) {}
 
   async create(payload: CreateExam) {
     const exam = this.examRepository.create({
       ...payload,
-      organizations: payload.organizationIds,
+      users: payload.organizationIds,
     });
 
     return await this.examRepository.persistAndFlush(exam);
   }
 
   async find() {
-    await this.secretjsService.saveExam({});
+    // await this.secretjsService.saveExam({});
     return await this.examRepository.findAll();
   }
 
@@ -67,7 +66,7 @@ export class ExamService {
 
     const exam = await this.examRepository.find(
       { id },
-      { populate: ['students', 'organizations'] },
+      { populate: ['users'] },
     );
     const credentials = await this.ipfsService.upload(payload.questions);
     //creadentials i info iz exam-a se salju na contract
