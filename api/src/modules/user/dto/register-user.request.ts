@@ -1,7 +1,7 @@
 import { IsEmail, IsEnum, IsOptional, Length } from 'class-validator';
 import { Role } from 'core/entities';
 
-export class RegisterUserDto {
+export class RegisterUser {
   @IsEnum(Role)
   public role = Role.Student;
 

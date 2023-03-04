@@ -1,7 +1,7 @@
 import { MikroORM } from '@mikro-orm/core';
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { DocumentBuilder, SwaggerDocumentOptions, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from 'app.module';
 
 async function bootstrap() {
@@ -12,9 +12,16 @@ async function bootstrap() {
     .setVersion('1.0')
     .build();
 
-  const document = SwaggerModule.createDocument(app, config);
+  const options: SwaggerDocumentOptions = {
+    operationIdFactory: (controllerKey: string, methodKey: string) => {
+      const entityName = controllerKey.replace('Controller', '');
+      return `${methodKey}${entityName}`;
+    },
+  };
 
-  SwaggerModule.setup('/', app, document);
+  const document = SwaggerModule.createDocument(app, config, options);
+
+  SwaggerModule.setup('docs', app, document);
 
   await app.get(MikroORM).getSchemaGenerator().ensureDatabase();
   await app.get(MikroORM).getSchemaGenerator().updateSchema();

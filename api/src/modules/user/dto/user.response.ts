@@ -1,9 +1,7 @@
-import { Collection } from '@mikro-orm/core';
-import { PartialType } from '@nestjs/mapped-types';
-import { IsEmail, IsEnum, IsNotEmpty, IsString, Length } from 'class-validator';
+import { IsEmail, IsEnum, Length } from 'class-validator';
 import { Role } from 'core/entities';
 
-export class ResponseUserDto {
+export class UserResponse {
   @IsEnum(Role)
   public role: Role;
 

@@ -1,12 +1,5 @@
-import {
-  Controller,
-  Delete,
-  Get,
-  Inject,
-  Param,
-  UseGuards,
-} from '@nestjs/common';
-import { ResponseUserDto } from './dto/response.dto';
+import { Controller, Delete, Get, Inject, Param } from '@nestjs/common';
+import { UserResponse } from './dto/user.response';
 import { UserService } from './user.service';
 import { ApiTags } from '@nestjs/swagger';
 
@@ -17,12 +10,12 @@ export class UserController {
   private readonly service: UserService;
 
   @Get(':id')
-  public get(@Param('id') id: string): Promise<ResponseUserDto> {
+  public get(@Param('id') id: string): Promise<UserResponse> {
     return this.service.get(id);
   }
 
   @Get()
-  public getAll(): Promise<ResponseUserDto[]> {
+  public getAll(): Promise<UserResponse[]> {
     return this.service.getAll();
   }
 

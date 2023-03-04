@@ -1,12 +1,14 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { AuthResponse, JwtPayload } from '.';
 import { verify, hash } from 'argon2';
-import { ResponseUserDto } from 'modules/user/dto/response.dto';
 import { User } from 'core/entities';
 import { UserService } from 'modules/user/user.service';
-import { RegisterUserDto } from 'modules/user/dto/register-user.dto';
-import { SignUserDto } from 'modules/user/dto/sign-user.dto';
+import { RegisterUser } from 'modules/user/dto/register-user.request';
+import { AuthResponse } from 'modules/auth/dto/auth-response';
+import { JwtPayload } from 'modules/auth/dto/jwt-payload.request';
+import { UserResponse } from 'modules/user/dto/user.response';
+import { SignUser } from 'modules/user/dto/sign-user.request';
+
 
 @Injectable()
 export class AuthService {
@@ -15,10 +17,10 @@ export class AuthService {
     private jwtTokenService: JwtService,
   ) {}
 
-  async signUp(dto: RegisterUserDto): Promise<AuthResponse> {
-    const hashPassword = await hash(dto.password);
+  async signUp(request: RegisterUser): Promise<AuthResponse> {
+    const hashPassword = await hash(request.password);
     const user = await this.usersService.addOne({
-      ...dto,
+      ...request,
       password: hashPassword,
     });
 
@@ -38,7 +40,7 @@ export class AuthService {
   async validateUserCredentials(
     username: string,
     password: string,
-  ): Promise<ResponseUserDto> {
+  ): Promise<UserResponse> {
     const user: User = await this.usersService.findOne(username);
     if (await verify(user.password, password)) {
       const { password, jmbg, ...response } = user;
@@ -48,7 +50,7 @@ export class AuthService {
     throw new BadRequestException(['Password does not matches']);
   }
 
-  async signIn(request: SignUserDto): Promise<AuthResponse> {
+  async signIn(request: SignUser): Promise<AuthResponse> {
     const user = await this.validateUserCredentials(
       request.username,
       request.password,

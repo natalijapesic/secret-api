@@ -1,4 +1,4 @@
-import { MikroOrmMiddleware, MikroOrmModule } from '@mikro-orm/nestjs';
+import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
 import { User } from 'core/entities';
 import { UserService } from 'modules/user/user.service';

@@ -7,10 +7,9 @@ import {
 } from '@nestjs/common';
 import { Exam } from 'core/entities';
 import { IPFSService } from 'core/services/ipfs.service';
-import { SecretJsService } from 'core/services/secretjs.service';
-import { CreateExam } from 'modules/exam/dto/create-exam.dto';
-import { UpdateExam } from 'modules/exam/dto/update-exam.dto';
-import { UploadQuestions } from 'modules/user/dto/UploadQuestions';
+import { CreateExam } from 'modules/exam/dto/create-exam.request';
+import { UpdateExam } from 'modules/exam/dto/update-exam.request';
+import { UploadQuestions } from 'modules/exam/dto/upload-questions.request';
 
 @Injectable()
 export class ExamService {

@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { ResponseUserDto } from './dto/response.dto';
-import { RegisterUserDto } from './dto/register-user.dto';
+import { UserResponse } from './dto/user.response';
+import { RegisterUser } from './dto/register-user.request';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { User } from 'core/entities';
 import { EntityRepository } from '@mikro-orm/postgresql';
+import { User } from 'core/entities';
 
 @Injectable()
 export class UserService {
@@ -21,14 +21,14 @@ export class UserService {
     return user;
   }
 
-  async addOne(newUser: RegisterUserDto) {
+  async addOne(newUser: RegisterUser) {
     const user = this.repository.create(newUser);
     await this.repository.persistAndFlush(user);
 
     return user;
   }
 
-  async get(id: string): Promise<ResponseUserDto> {
+  async get(id: string): Promise<UserResponse> {
     const user = await this.repository.findOne({
       id,
     });

@@ -8,8 +8,8 @@ import {
   Delete,
   Logger,
 } from '@nestjs/common';
-import { CreateExam } from 'modules/exam/dto/create-exam.dto';
-import { UpdateExam } from 'modules/exam/dto/update-exam.dto';
+import { CreateExam } from 'modules/exam/dto/create-exam.request';
+import { UpdateExam } from 'modules/exam/dto/update-exam.request';
 import { ExamService } from './exam.service';
 
 @Controller('exam')

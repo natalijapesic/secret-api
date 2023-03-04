@@ -1,4 +1,4 @@
-import { JwtPayload } from "modules/auth";
+import { JwtPayload } from "modules/auth/dto/jwt-payload.request";
 
 export const ROLES_KEY = 'roles';
 
