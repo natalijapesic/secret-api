@@ -1,5 +1,5 @@
-import { IsArray } from 'class-validator';
-import { LocationInfo } from 'core/types/location.dto';
+import { IsOptional } from 'class-validator';
+import { LocationInfo } from 'core/entities/location.entity';
 
 export class CreateExamRequest {
   name!: string;
@@ -8,6 +8,6 @@ export class CreateExamRequest {
 
   course: string;
 
-  @IsArray()
-  locations: LocationInfo[];
+  @IsOptional()
+  locations?: LocationInfo[];
 }

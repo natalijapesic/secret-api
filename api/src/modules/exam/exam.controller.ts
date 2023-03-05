@@ -9,9 +9,10 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { Exam } from 'core/entities';
 import { CreateExamRequest } from 'modules/exam/dto/create-exam.request';
-import { ExamResponse } from 'modules/exam/dto/exam.response';
 import { UpdateExamRequest } from 'modules/exam/dto/update-exam.request';
+import { UpdateUserRelation } from 'modules/exam/dto/update-user-relation.request';
 import { UploadQuestionsRequest } from 'modules/exam/dto/upload-questions.request';
 import { UploadQuestionsResponse } from 'modules/exam/dto/upload-questions.response';
 import { ExamService } from './exam.service';
@@ -22,17 +23,17 @@ export class ExamController {
   constructor(private readonly examService: ExamService) {}
 
   @Post()
-  create(@Body() payload: CreateExamRequest): Promise<ExamResponse> {
+  create(@Body() payload: CreateExamRequest): Promise<Exam> {
     return this.examService.create(payload);
   }
 
   @Get()
-  find(): Promise<ExamResponse[]> {
+  find() {
     return this.examService.find();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<ExamResponse> {
+  findOne(@Param('id') id: string): Promise<Exam> {
     return this.examService.findOne(id);
   }
 
@@ -40,7 +41,7 @@ export class ExamController {
   update(
     @Param('id') id: string,
     @Body() payload: UpdateExamRequest,
-  ): Promise<ExamResponse> {
+  ): Promise<Exam> {
     return this.examService.update(id, payload);
   }
 
@@ -54,5 +55,13 @@ export class ExamController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.examService.remove(id);
+  }
+
+  @Patch(':id/relationships/user')
+  async updateRelation(
+    @Param('id') id: string,
+    @Body() payload: UpdateUserRelation,
+  ): Promise<Exam> {
+    return await this.examService.updateUserRelation(id, payload.userIds);
   }
 }

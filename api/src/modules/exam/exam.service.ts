@@ -4,6 +4,7 @@ import { EntityRepository } from '@mikro-orm/postgresql';
 import {
   BadRequestException,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { Exam, Role, User } from 'core/entities';
@@ -24,9 +25,10 @@ export class ExamService {
   ) {}
 
   async create(payload: CreateExamRequest) {
-    const exam = this.examRepository.create({
-      ...payload,
-    });
+    Logger.log(payload);
+    const exam = this.examRepository.create(payload);
+
+    Logger.log(exam);
 
     await this.examRepository.persistAndFlush(exam);
 
@@ -84,9 +86,9 @@ export class ExamService {
 
     const ipfsInfo = await this.ipfsService.upload(payload.questions);
 
-    const organizationAddresses = exam.users.getItems().map(
-      (organization) => organization.walletAddress,
-    );
+    const organizationAddresses = exam.users
+      .getItems()
+      .map((organization) => organization.walletAddress);
 
     return { ipfsInfo, organizationAddresses };
   }
@@ -95,5 +97,21 @@ export class ExamService {
     const exam = await this.examRepository.findOne(id);
 
     exam.contractId = contractId;
+  }
+
+  async updateUserRelation(id: string, userIds: string[]) {
+    const exam = await this.examRepository.findOne(id);
+
+    if (!exam) throw new BadRequestException('Exam doesnt exist');
+
+    const users = userIds.map((id) => this.userRepository.getReference(id));
+
+    if (!users.length) throw new BadRequestException('Users do not exist');
+
+    exam.users.add(users);
+
+    await this.examRepository.persistAndFlush(exam);
+
+    return exam;
   }
 }

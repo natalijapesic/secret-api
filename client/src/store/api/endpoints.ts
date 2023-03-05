@@ -66,6 +66,16 @@ const injectedRtkApi = api.injectEndpoints({
         },
       }),
     }),
+    updateRelationExam: build.mutation<
+      UpdateRelationExamApiResponse,
+      UpdateRelationExamApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/exam/${queryArg.id}/relationships/user`,
+        method: "PATCH",
+        body: queryArg.updateUserRelation,
+      }),
+    }),
   }),
   overrideExisting: false,
 });
@@ -94,17 +104,17 @@ export type DeleteUserApiArg = {
 };
 export type GetAllUserApiResponse = /** status 200  */ UserResponse[];
 export type GetAllUserApiArg = void;
-export type CreateExamApiResponse = /** status 201  */ ExamResponse;
+export type CreateExamApiResponse = /** status 201  */ Exam;
 export type CreateExamApiArg = {
   createExamRequest: CreateExamRequest;
 };
-export type FindExamApiResponse = /** status 200  */ ExamResponse[];
+export type FindExamApiResponse = /** status 200  */ object[];
 export type FindExamApiArg = void;
-export type FindOneExamApiResponse = /** status 200  */ ExamResponse;
+export type FindOneExamApiResponse = /** status 200  */ Exam;
 export type FindOneExamApiArg = {
   id: string;
 };
-export type UpdateExamApiResponse = /** status 200  */ ExamResponse;
+export type UpdateExamApiResponse = /** status 200  */ Exam;
 export type UpdateExamApiArg = {
   id: string;
   updateExamRequest: UpdateExamRequest;
@@ -117,6 +127,11 @@ export type UploadExamApiResponse = /** status 201  */ UploadQuestionsResponse;
 export type UploadExamApiArg = {
   examId: string;
   walletAddres: string;
+};
+export type UpdateRelationExamApiResponse = /** status 200  */ Exam;
+export type UpdateRelationExamApiArg = {
+  id: string;
+  updateUserRelation: UpdateUserRelation;
 };
 export type AuthResponse = {};
 export type SignUser = {
@@ -139,26 +154,28 @@ export type UserResponse = {
   wallet?: string;
   username: string;
 };
-export type LocationInfo = {
-  street: string;
-  number: string;
-  city: string;
-  municipality: string;
-};
-export type ExamResponse = {
+export type Exam = {
   id: string;
   name: string;
   time: number;
+  contractId?: string;
   course: string;
-  locations: LocationInfo[];
   isReady: boolean;
-  contractId: string;
+  users: object;
+  locations: object;
+};
+export type LocationInfo = {
+  id: string;
+  street: string;
+  number: string;
+  city: string;
+  municipality?: string;
 };
 export type CreateExamRequest = {
   name: string;
   time: number;
   course: string;
-  locations: LocationInfo[];
+  locations?: LocationInfo[];
 };
 export type UpdateExamRequest = {
   isReady: boolean;
@@ -167,6 +184,9 @@ export type UpdateExamRequest = {
 export type UploadQuestionsResponse = {
   ipfsInfo: object;
   organizationAddresses: string[];
+};
+export type UpdateUserRelation = {
+  userIds: string[];
 };
 export const {
   useGetHelloAppQuery,
@@ -182,4 +202,5 @@ export const {
   useUpdateExamMutation,
   useRemoveExamMutation,
   useUploadExamMutation,
+  useUpdateRelationExamMutation,
 } = injectedRtkApi;

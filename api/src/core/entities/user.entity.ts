@@ -35,9 +35,6 @@ export class User extends BaseEntity<User, 'id'> {
 
   @Enum(() => Role)
   role: Role;
-
-  @ManyToMany(() => Exam, (exam) => exam.users)
-  exams: Collection<Exam> = new Collection<Exam>(this);
 }
 export enum Role {
   Admin = 'admin',
