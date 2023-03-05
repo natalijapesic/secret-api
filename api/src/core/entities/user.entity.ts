@@ -1,14 +1,11 @@
 import {
   BaseEntity,
-  Collection,
   Entity,
   Enum,
-  ManyToMany,
   PrimaryKey,
   Property,
   Unique,
 } from '@mikro-orm/core';
-import { Exam } from 'core/entities';
 import { v4 as uuidv4 } from 'uuid';
 
 @Entity()

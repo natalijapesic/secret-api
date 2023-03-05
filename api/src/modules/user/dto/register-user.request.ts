@@ -20,5 +20,5 @@ export class RegisterUser {
   public email: string;
 
   @IsOptional()
-  public wallet: string;
+  public walletAddress?: string;
 }
