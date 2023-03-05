@@ -1,3 +1,4 @@
+import { PopulateHint } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/postgresql';
 import {
@@ -5,11 +6,12 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Exam } from 'core/entities';
+import { Exam, Role, User } from 'core/entities';
 import { IPFSService } from 'core/services/ipfs.service';
-import { CreateExam } from 'modules/exam/dto/create-exam.request';
-import { UpdateExam } from 'modules/exam/dto/update-exam.request';
-import { UploadQuestions } from 'modules/exam/dto/upload-questions.request';
+import { CreateExamRequest } from 'modules/exam/dto/create-exam.request';
+import { UpdateExamRequest } from 'modules/exam/dto/update-exam.request';
+import { UploadQuestionsRequest } from 'modules/exam/dto/upload-questions.request';
+import { UploadQuestionsResponse } from 'modules/exam/dto/upload-questions.response';
 
 @Injectable()
 export class ExamService {
@@ -17,19 +19,21 @@ export class ExamService {
     @InjectRepository(Exam)
     private readonly examRepository: EntityRepository<Exam>,
     private readonly ipfsService: IPFSService,
+    @InjectRepository(User)
+    private readonly userRepository: EntityRepository<User>,
   ) {}
 
-  async create(payload: CreateExam) {
+  async create(payload: CreateExamRequest) {
     const exam = this.examRepository.create({
       ...payload,
-      users: payload.organizationIds,
     });
 
-    return await this.examRepository.persistAndFlush(exam);
+    await this.examRepository.persistAndFlush(exam);
+
+    return exam;
   }
 
   async find() {
-    // await this.secretjsService.saveExam({});
     return await this.examRepository.findAll();
   }
 
@@ -40,11 +44,14 @@ export class ExamService {
     return exam;
   }
 
-  async update(id: string, payload: UpdateExam) {
+  async update(id: string, payload: UpdateExamRequest) {
     const exam = await this.findOne(id);
+
     exam.assign(payload);
 
-    return await this.examRepository.persistAndFlush(exam);
+    await this.examRepository.persistAndFlush(exam);
+
+    return exam;
   }
 
   async remove(id: string) {
@@ -53,26 +60,40 @@ export class ExamService {
   }
 
   async uploadQuestions(
-    id: string,
-    payload: UploadQuestions,
-    walletAddres: string,
-  ) {
-    //validira da li uopste moze ova fja da se izvrsi na contract-u...samo query
-    const isParlament = 'true';
+    payload: UploadQuestionsRequest,
+  ): Promise<UploadQuestionsResponse> {
+    const parlament = await this.userRepository.findOne({
+      walletAddress: { $eq: payload.walletAddres },
+    });
 
-    if (!isParlament)
+    if (!parlament)
       throw new BadRequestException('Wallet address is not parlament address');
 
-    const exam = await this.examRepository.find(
-      { id },
-      { populate: ['users'] },
-    );
-    const credentials = await this.ipfsService.upload(payload.questions);
-    //creadentials i info iz exam-a se salju na contract
-    const contractId = 'Ovde se pozove fja SaveExam na contract-u';
+    const exam = await this.examRepository.findOne(
+      {
+        id: { $eq: payload.examId },
 
-    //
+        isReady: { $eq: true },
+
+        users: { role: { $eq: Role.Organization } },
+      },
+      { populateWhere: PopulateHint.INFER },
+    );
+
+    if (!exam) throw new BadRequestException('Exam is not ready for upload');
+
+    const ipfsInfo = await this.ipfsService.upload(payload.questions);
+
+    const organizationAddresses = exam.users.getItems().map(
+      (organization) => organization.walletAddress,
+    );
+
+    return { ipfsInfo, organizationAddresses };
   }
 
-  async assignContract(id: string, contractId: string) {}
+  async assignContract(id: string, contractId: string) {
+    const exam = await this.examRepository.findOne(id);
+
+    exam.contractId = contractId;
+  }
 }

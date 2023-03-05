@@ -1,13 +1,17 @@
-import { IsArray } from 'class-validator';
 import { LocationInfo } from 'core/types/location.dto';
 
-export class CreateExamRequest {
+export class ExamResponse {
+  id: string;
+
   name!: string;
 
   time: number;
 
   course: string;
 
-  @IsArray()
   locations: LocationInfo[];
+
+  isReady: boolean;
+
+  contractId: string;
 }

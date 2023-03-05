@@ -1,4 +1,8 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { CreateExam } from './create-exam.request';
+import { CreateExamRequest } from './create-exam.request';
 
-export class UpdateExam extends PartialType(CreateExam) {}
+export class UpdateExamRequest extends PartialType(CreateExamRequest) {
+    isReady: boolean;
+
+    contractId: string;
+}

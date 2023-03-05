@@ -1,7 +1,9 @@
-import { Question } from 'core/types/question';
+import { Question } from 'core/types/question.dto';
 
-export class UploadQuestions {
+export class UploadQuestionsRequest {
   questions: Question[];
 
   examId: string;
+
+  walletAddres: string;
 }

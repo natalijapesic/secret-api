@@ -37,7 +37,7 @@ const injectedRtkApi = api.injectEndpoints({
       query: (queryArg) => ({
         url: `/exam`,
         method: "POST",
-        body: queryArg.createExam,
+        body: queryArg.createExamRequest,
       }),
     }),
     findExam: build.query<FindExamApiResponse, FindExamApiArg>({
@@ -50,11 +50,21 @@ const injectedRtkApi = api.injectEndpoints({
       query: (queryArg) => ({
         url: `/exam/${queryArg.id}`,
         method: "PATCH",
-        body: queryArg.updateExam,
+        body: queryArg.updateExamRequest,
       }),
     }),
     removeExam: build.mutation<RemoveExamApiResponse, RemoveExamApiArg>({
       query: (queryArg) => ({ url: `/exam/${queryArg.id}`, method: "DELETE" }),
+    }),
+    uploadExam: build.mutation<UploadExamApiResponse, UploadExamApiArg>({
+      query: (queryArg) => ({
+        url: `/exam/upload-questions`,
+        method: "POST",
+        params: {
+          examId: queryArg.examId,
+          walletAddres: queryArg.walletAddres,
+        },
+      }),
     }),
   }),
   overrideExisting: false,
@@ -84,24 +94,29 @@ export type DeleteUserApiArg = {
 };
 export type GetAllUserApiResponse = /** status 200  */ UserResponse[];
 export type GetAllUserApiArg = void;
-export type CreateExamApiResponse = unknown;
+export type CreateExamApiResponse = /** status 201  */ ExamResponse;
 export type CreateExamApiArg = {
-  createExam: CreateExam;
+  createExamRequest: CreateExamRequest;
 };
-export type FindExamApiResponse = /** status 200  */ object[];
+export type FindExamApiResponse = /** status 200  */ ExamResponse[];
 export type FindExamApiArg = void;
-export type FindOneExamApiResponse = /** status 200  */ object;
+export type FindOneExamApiResponse = /** status 200  */ ExamResponse;
 export type FindOneExamApiArg = {
   id: string;
 };
-export type UpdateExamApiResponse = unknown;
+export type UpdateExamApiResponse = /** status 200  */ ExamResponse;
 export type UpdateExamApiArg = {
   id: string;
-  updateExam: UpdateExam;
+  updateExamRequest: UpdateExamRequest;
 };
 export type RemoveExamApiResponse = unknown;
 export type RemoveExamApiArg = {
   id: string;
+};
+export type UploadExamApiResponse = /** status 201  */ UploadQuestionsResponse;
+export type UploadExamApiArg = {
+  examId: string;
+  walletAddres: string;
 };
 export type AuthResponse = {};
 export type SignUser = {
@@ -109,7 +124,7 @@ export type SignUser = {
   password: string;
 };
 export type RegisterUser = {
-  role: "profesor" | "student" | "organization";
+  role: "admin" | "parlament" | "profesor" | "student" | "organization";
   name: string;
   username: string;
   jmbg: string;
@@ -118,22 +133,41 @@ export type RegisterUser = {
   wallet: string;
 };
 export type UserResponse = {
-  role: "profesor" | "student" | "organization";
+  role: "admin" | "parlament" | "profesor" | "student" | "organization";
   id: string;
   email: string;
   wallet?: string;
   username: string;
 };
-export type LocationInfo = {};
-export type CreateExam = {
+export type LocationInfo = {
+  street: string;
+  number: string;
+  city: string;
+  municipality: string;
+};
+export type ExamResponse = {
+  id: string;
   name: string;
   time: number;
-  contractId?: number;
   course: string;
   locations: LocationInfo[];
-  organizationIds: string[];
+  isReady: boolean;
+  contractId: string;
 };
-export type UpdateExam = {};
+export type CreateExamRequest = {
+  name: string;
+  time: number;
+  course: string;
+  locations: LocationInfo[];
+};
+export type UpdateExamRequest = {
+  isReady: boolean;
+  contractId: string;
+};
+export type UploadQuestionsResponse = {
+  ipfsInfo: object;
+  organizationAddresses: string[];
+};
 export const {
   useGetHelloAppQuery,
   useSignInAuthMutation,
@@ -147,4 +181,5 @@ export const {
   useFindOneExamQuery,
   useUpdateExamMutation,
   useRemoveExamMutation,
+  useUploadExamMutation,
 } = injectedRtkApi;
