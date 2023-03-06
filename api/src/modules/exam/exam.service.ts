@@ -83,7 +83,7 @@ export class ExamService {
       {
         strategy: LoadStrategy.SELECT_IN,
         populate: ['users'],
-        populateWhere: { users: { role: { $eq: Role.Parlament } } },
+        populateWhere: { users: { role: { $eq: Role.Organization } } },
       },
     );
 
