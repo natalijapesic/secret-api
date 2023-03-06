@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Exam } from 'core/entities';
+import { DeepQuery } from 'core/types/query.decorator';
 import { CreateExamRequest } from 'modules/exam/dto/create-exam.request';
 import { UpdateExamRequest } from 'modules/exam/dto/update-exam.request';
 import { UpdateUserRelation } from 'modules/exam/dto/update-user-relation.request';
@@ -47,11 +48,13 @@ export class ExamController {
     return this.examService.update(id, payload);
   }
 
-  @Post('/upload-questions')
-  upload(
-    @Query() request: UploadQuestionsRequest,
+
+  @Patch(':id/upload/questions')
+  @DeepQuery('query', UploadQuestionsRequest)
+  upload(@Param('id') id: string,
+    @Query('query') query: UploadQuestionsRequest,
   ): Promise<UploadQuestionsResponse> {
-    return this.examService.uploadQuestions(request);
+    return this.examService.uploadQuestions(id, query);
   }
 
   @Delete(':id')

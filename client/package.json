@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "openapi":"npx @rtk-query/codegen-openapi openapi-config.ts",
     "lint": "next lint"
   },
   "dependencies": {

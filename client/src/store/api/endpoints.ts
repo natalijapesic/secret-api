@@ -55,12 +55,9 @@ const injectedRtkApi = api.injectEndpoints({
     }),
     uploadExam: build.mutation<UploadExamApiResponse, UploadExamApiArg>({
       query: (queryArg) => ({
-        url: `/exam/upload-questions`,
-        method: "POST",
-        params: {
-          examId: queryArg.examId,
-          walletAddres: queryArg.walletAddres,
-        },
+        url: `/exam/${queryArg.id}/upload/questions`,
+        method: "PATCH",
+        params: { query: queryArg.query },
       }),
     }),
     updateRelationExam: build.mutation<
@@ -116,10 +113,10 @@ export type RemoveExamApiResponse = unknown;
 export type RemoveExamApiArg = {
   id: string;
 };
-export type UploadExamApiResponse = /** status 201  */ UploadQuestionsResponse;
+export type UploadExamApiResponse = /** status 200  */ UploadQuestionsResponse;
 export type UploadExamApiArg = {
-  examId: string;
-  walletAddres: string;
+  id: string;
+  query?: UploadQuestionsRequest;
 };
 export type UpdateRelationExamApiResponse = /** status 200  */ Exam;
 export type UpdateRelationExamApiArg = {
@@ -177,6 +174,15 @@ export type UpdateExamRequest = {
 export type UploadQuestionsResponse = {
   ipfsInfo: object;
   organizationAddresses: string[];
+};
+export type Question = {
+  text: string;
+  options: string[];
+  answer: string;
+};
+export type UploadQuestionsRequest = {
+  questions: Question[];
+  walletAddres: string;
 };
 export type UpdateUserRelation = {
   userIds: string[];

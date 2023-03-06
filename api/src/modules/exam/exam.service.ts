@@ -1,9 +1,10 @@
-import { PopulateHint } from '@mikro-orm/core';
+import { LoadStrategy, PopulateHint } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/postgresql';
 import {
   BadRequestException,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { Exam, Role, User } from 'core/entities';
@@ -12,6 +13,7 @@ import { CreateExamRequest } from 'modules/exam/dto/create-exam.request';
 import { UpdateExamRequest } from 'modules/exam/dto/update-exam.request';
 import { UploadQuestionsRequest } from 'modules/exam/dto/upload-questions.request';
 import { UploadQuestionsResponse } from 'modules/exam/dto/upload-questions.response';
+import { lengthOpFromJSON } from 'secretjs/dist/protobuf/confio/proofs';
 
 @Injectable()
 export class ExamService {
@@ -41,7 +43,7 @@ export class ExamService {
 
   async findOne(id: string) {
     const exam = await this.examRepository.findOne({ id });
-    
+
     if (!exam) throw new NotFoundException('Exam does not exist');
 
     return exam;
@@ -63,10 +65,12 @@ export class ExamService {
   }
 
   async uploadQuestions(
+    id: string,
     payload: UploadQuestionsRequest,
   ): Promise<UploadQuestionsResponse> {
     const parlament = await this.userRepository.findOne({
       walletAddress: { $eq: payload.walletAddres },
+      role: { $eq: Role.Parlament },
     });
 
     if (!parlament)
@@ -74,18 +78,22 @@ export class ExamService {
 
     const exam = await this.examRepository.findOne(
       {
-        id: { $eq: payload.examId },
-
         isReady: { $eq: true },
-
-        users: { role: { $eq: Role.Organization } },
       },
-      { populateWhere: PopulateHint.INFER },
+      {
+        strategy: LoadStrategy.SELECT_IN,
+        populate: ['users'],
+        populateWhere: { users: { role: { $eq: Role.Parlament } } },
+      },
     );
+
+    Logger.log('exam', exam);
 
     if (!exam) throw new BadRequestException('Exam is not ready for upload');
 
-    const ipfsInfo = await this.ipfsService.upload(payload.questions);
+    const ipfsInfo = await this.ipfsService.upload(exam);
+
+    Logger.log(ipfsInfo);
 
     const organizationAddresses = exam.users
       .getItems()
