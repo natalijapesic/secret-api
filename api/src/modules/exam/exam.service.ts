@@ -4,7 +4,6 @@ import { EntityRepository } from '@mikro-orm/postgresql';
 import {
   BadRequestException,
   Injectable,
-  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { Exam, Role, User } from 'core/entities';
@@ -25,22 +24,24 @@ export class ExamService {
   ) {}
 
   async create(payload: CreateExamRequest) {
-    Logger.log(payload);
     const exam = this.examRepository.create(payload);
-
-    Logger.log(exam);
 
     await this.examRepository.persistAndFlush(exam);
 
     return exam;
   }
 
-  async find() {
-    return await this.examRepository.findAll();
+  async findAll() {
+    const exams = await this.examRepository.findAll();
+
+    if (!exams.length) throw new NotFoundException('Exams do not exist');
+
+    return exams;
   }
 
   async findOne(id: string) {
     const exam = await this.examRepository.findOne({ id });
+    
     if (!exam) throw new NotFoundException('Exam does not exist');
 
     return exam;

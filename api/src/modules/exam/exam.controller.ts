@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Query,
+  Logger,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Exam } from 'core/entities';
@@ -28,8 +29,9 @@ export class ExamController {
   }
 
   @Get()
-  find() {
-    return this.examService.find();
+  async findAll(){
+    Logger.log('ovde');
+    return await this.examService.findAll();
   }
 
   @Get(':id')

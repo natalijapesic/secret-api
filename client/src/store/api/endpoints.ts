@@ -1,9 +1,6 @@
 import { api } from "../api";
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
-    getHelloApp: build.query<GetHelloAppApiResponse, GetHelloAppApiArg>({
-      query: (queryArg) => ({ url: `/${queryArg.message}` }),
-    }),
     signInAuth: build.mutation<SignInAuthApiResponse, SignInAuthApiArg>({
       query: (queryArg) => ({
         url: `/auth/signIn`,
@@ -40,7 +37,7 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.createExamRequest,
       }),
     }),
-    findExam: build.query<FindExamApiResponse, FindExamApiArg>({
+    findAllExam: build.query<FindAllExamApiResponse, FindAllExamApiArg>({
       query: () => ({ url: `/exam` }),
     }),
     findOneExam: build.query<FindOneExamApiResponse, FindOneExamApiArg>({
@@ -80,10 +77,6 @@ const injectedRtkApi = api.injectEndpoints({
   overrideExisting: false,
 });
 export { injectedRtkApi as PimsApi };
-export type GetHelloAppApiResponse = /** status 200  */ string;
-export type GetHelloAppApiArg = {
-  message: string;
-};
 export type SignInAuthApiResponse = /** status 201  */ AuthResponse;
 export type SignInAuthApiArg = {
   signUser: SignUser;
@@ -108,8 +101,8 @@ export type CreateExamApiResponse = /** status 201  */ Exam;
 export type CreateExamApiArg = {
   createExamRequest: CreateExamRequest;
 };
-export type FindExamApiResponse = /** status 200  */ object[];
-export type FindExamApiArg = void;
+export type FindAllExamApiResponse = /** status 200  */ object[];
+export type FindAllExamApiArg = void;
 export type FindOneExamApiResponse = /** status 200  */ Exam;
 export type FindOneExamApiArg = {
   id: string;
@@ -145,13 +138,13 @@ export type RegisterUser = {
   jmbg: string;
   password: string;
   email: string;
-  wallet: string;
+  walletAddress?: string;
 };
 export type UserResponse = {
   role: "admin" | "parlament" | "profesor" | "student" | "organization";
   id: string;
   email: string;
-  wallet?: string;
+  walletAddress?: string;
   username: string;
 };
 export type Exam = {
@@ -189,7 +182,6 @@ export type UpdateUserRelation = {
   userIds: string[];
 };
 export const {
-  useGetHelloAppQuery,
   useSignInAuthMutation,
   useGetUserInfoAuthQuery,
   useSignUpAuthMutation,
@@ -197,7 +189,7 @@ export const {
   useDeleteUserMutation,
   useGetAllUserQuery,
   useCreateExamMutation,
-  useFindExamQuery,
+  useFindAllExamQuery,
   useFindOneExamQuery,
   useUpdateExamMutation,
   useRemoveExamMutation,
