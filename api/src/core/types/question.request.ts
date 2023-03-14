@@ -1,4 +1,4 @@
-export interface Question {
+export class Question {
   text: string;
   options: string[];
   answer: string;

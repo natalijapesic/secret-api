@@ -1,17 +1,13 @@
-import { IsArray } from 'class-validator';
-import { LocationInfo } from 'core/types/location';
+import { IsOptional } from 'class-validator';
+import { LocationInfo } from 'core/entities/location.entity';
 
-export class CreateExam {
+export class CreateExamRequest {
   name!: string;
 
   time: number;
 
-  contractId?: number;
-
   course: string;
 
-  @IsArray()
-  locations: LocationInfo[];
-
-  organizationIds: string[];
+  @IsOptional()
+  locations?: LocationInfo[];
 }

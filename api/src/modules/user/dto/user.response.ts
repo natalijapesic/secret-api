@@ -10,7 +10,7 @@ export class UserResponse {
   @IsEmail()
   public email: string;
 
-  public wallet?: string;
+  public walletAddress?: string;
 
   @Length(4, 10)
   public username: string;

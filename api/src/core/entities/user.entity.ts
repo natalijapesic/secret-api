@@ -25,7 +25,7 @@ export class User extends BaseEntity<User, 'id'> {
   password: string;
 
   @Property()
-  wallet?: string;
+  walletAddress?: string;
 
   @Property()
   jmbg: string;
@@ -33,8 +33,9 @@ export class User extends BaseEntity<User, 'id'> {
   @Enum(() => Role)
   role: Role;
 }
-
 export enum Role {
+  Admin = 'admin',
+  Parlament = 'parlament',
   Profesor = 'profesor',
   Student = 'student',
   Organization = 'organization',

@@ -1,7 +1,7 @@
-import { Question } from 'core/types/question';
+import { Question } from "core/types/question.request";
 
-export class UploadQuestions {
+export class UploadQuestionsRequest {
   questions: Question[];
 
-  examId: string;
+  walletAddres: string;
 }

@@ -39,6 +39,12 @@ export class UserService {
     return response;
   }
 
+  async isParlament(address: string): Promise<boolean> {
+    const user = this.repository.find({ walletAddress: { $eq: address } });
+    
+    return !!user;
+  }
+
   async remove(id: string): Promise<string> {
     const user = await this.repository.findOne(id);
 

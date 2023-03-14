@@ -1,32 +1,34 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { SecretNetworkClient } from 'secretjs';
-import { AminoWallet } from 'secretjs/dist/wallet_amino';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class SecretJsService {
-  private readonly client = new SecretNetworkClient({
-    url: 'https://api.pulsar.scrttestnet.com',
-    chainId: 'pulsar-2',
-    wallet: new AminoWallet(
-      'hard trust royal express upper theory garden rotate reform north club permit stove add actress globe bronze finish unknown question dinosaur dash brain way',
-    ),
-  });
+  // private async initializeClient(accountAddres: string) {
+  //   const CHAIN_ID = 'secretdev-1';
+    
+  //   const keplrOfflineSigner = window.keplr.getOfflineSignerOnlyAmino(CHAIN_ID);
+  //   const client = new SecretNetworkClient({
+  //     url: 'http://localhost:1317',
+  //     chainId: 'secretdev-1',
+  //     wallet: new KeplrWallet(),
+  //     walletAddress: accountAddres
+  //   });
+  // }
 
-  public async saveExam(payload: object) {
-    const saveExamMsg = {
-      save_exam: {
-        // the enum variant, but in snake case. !!!IMPORTANT
-        ...payload,
-      },
-    };
+  // public async saveExam(payload: object) {
+  //   const saveExamMsg = {
+  //     save_exam: {
+  //       // the enum variant, but in snake case. !!!IMPORTANT
+  //       ...payload,
+  //     },
+  //   };
 
-    const { code } = await this.client.tx.compute.executeContract({
-      contract_address: '', // LOADED FROM CONFIG
-      msg: saveExamMsg,
-      sender: '', // your address
-      code_hash: '', // LOADED FROM CONFIG
-    });
-  }
+  //   const { code } = await this.client.tx.compute.executeContract({
+  //     contract_address: '', // LOADED FROM CONFIG
+  //     msg: saveExamMsg,
+  //     sender: '', // your address
+  //     code_hash: '', // LOADED FROM CONFIG
+  //   });
+  // }
 }
 
 //docker exec -it localsecret /bin/bash
