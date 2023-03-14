@@ -4,7 +4,7 @@ import { IPFSInfo } from 'core/types/ipfs.dto';
 
 @Injectable()
 export class IPFSService {
-  private readonly BASE_URL = 'http://localhost:5000';
+  private readonly BASE_URL = 'http://localhost:1389';
   constructor() {}
 
   async upload(content: Object): Promise<IPFSInfo> {

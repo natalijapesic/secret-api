@@ -64,8 +64,7 @@ export class ExamService {
     return await this.examRepository.removeAndFlush(exam);
   }
 
-  async uploadQuestions(
-    id: string,
+  async upload(
     payload: UploadQuestionsRequest,
   ): Promise<UploadQuestionsResponse> {
     const parlament = await this.userRepository.findOne({
@@ -90,8 +89,9 @@ export class ExamService {
     Logger.log('exam', exam);
 
     if (!exam) throw new BadRequestException('Exam is not ready for upload');
+    Logger.log(payload.questions);
 
-    const ipfsInfo = await this.ipfsService.upload(exam);
+    const ipfsInfo = await this.ipfsService.upload(payload.questions);
 
     Logger.log(ipfsInfo);
 

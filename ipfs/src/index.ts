@@ -7,7 +7,7 @@ import { downloadBlob } from "./services/ipfs.service";
 
 dotenv.config();
 
-const PORT = 5000;
+const PORT = 1389;
 
 interface IpfsContent {
   path: string;

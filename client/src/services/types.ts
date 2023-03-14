@@ -19,7 +19,7 @@ export interface MerkleAuth {
 
 export interface MerkleTreeInfo {
   root: number[];
-  leaves_count: number;
+  leaves_count: string;
 }
 
 export const merkleData: MerkleData = {
@@ -33,5 +33,4 @@ export interface SaveExam {
   start_time: string;
   orgs: MerkleTreeInfo;
   ipfs: Ipfs;
-
 };

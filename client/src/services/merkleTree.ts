@@ -2,24 +2,24 @@ import { MerkleAuth, MerkleTreeInfo } from "@/services/types";
 import SHA256 from "crypto-js/sha256";
 import MerkleTree from "merkletreejs";
 
-const generateTree = (addresses: string[]): MerkleTree => {
+export const generateTree = (addresses: string[]): MerkleTree => {
   const leaves = addresses.map((x) => SHA256(x));
   const tree = new MerkleTree(leaves, SHA256);
 
   return tree;
 };
 
-const generateInfo = (
+export const generateInfo = (
   tree: MerkleTree,
   address_count: number
 ): MerkleTreeInfo => {
   return {
     root: tree.getRoot().toJSON().data,
-    leaves_count: address_count,
+    leaves_count: address_count.toString(),
   };
 };
 
-const generateAuth = (
+export const generateAuth = (
   tree: MerkleTree,
   address: string,
   index: number

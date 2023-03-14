@@ -55,7 +55,7 @@ const injectedRtkApi = api.injectEndpoints({
     }),
     uploadExam: build.mutation<UploadExamApiResponse, UploadExamApiArg>({
       query: (queryArg) => ({
-        url: `/exam/${queryArg.id}/upload/questions`,
+        url: `/exam/${queryArg.id}/upload`,
         method: "PATCH",
         params: { query: queryArg.query },
       }),

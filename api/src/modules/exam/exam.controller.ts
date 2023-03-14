@@ -49,12 +49,12 @@ export class ExamController {
   }
 
 
-  @Patch(':id/upload/questions')
-  @DeepQuery('query', UploadQuestionsRequest)
-  upload(@Param('id') id: string,
-    @Query('query') query: UploadQuestionsRequest,
+  @Post('/upload')
+  // @DeepQuery('query', UploadQuestionsRequest)
+  upload(
+    @Body() query: UploadQuestionsRequest,
   ): Promise<UploadQuestionsResponse> {
-    return this.examService.uploadQuestions(id, query);
+    return this.examService.upload(query);
   }
 
   @Delete(':id')
