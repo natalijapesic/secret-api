@@ -9,8 +9,9 @@ import {
 
 const chainId = "secretdev-1";
 const url = "http://localhost:1317";
-const contractHash = "394b7706d51c83f84ee275cb175cb3c8fc3c2f83e00350cc30f33953dba6b7ae";
-const contractAddress = "secret10pyejy66429refv3g35g2t7am0was7ya6hvrzf";
+const contractHash =
+  "394b7706d51c83f84ee275cb175cb3c8fc3c2f83e00350cc30f33953dba6b7ae";
+const contractAddress = "secret1ulgw0td86nvs4wtpsc80thv6xelk76ut6us57w";
 
 class SecretJsService {
   async initializeClient() {
@@ -92,8 +93,6 @@ class SecretJsService {
     request: SaveExam,
     client: SecretNetworkClient
   ): Promise<ExamResponse> {
-  
-
     const tx: TxResponse = await client.tx.compute.executeContract(
       {
         sender: client.address,

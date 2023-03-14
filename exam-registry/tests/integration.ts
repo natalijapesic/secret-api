@@ -6,6 +6,11 @@ import MerkleTree from "merkletreejs";
 
 type IpfsResponse = { path: string; secret: string; iv: string };
 
+const parlamentAddresses = [
+  "secret1ypjgplhk9x7attdf90jnzwp0h7p7zlhp08w0w2",
+  "secret1fdlw5a6jnsvrdjx64nrnd44ue2
+  f45ml4vhmf73",
+];
 type ExamResponse = {
   exam_id: number;
   exam_time: string;
@@ -89,11 +94,12 @@ const initializeContract = async (
 
   console.log(`Contract hash: ${contractCodeHash}`);
 
+  parlamentAddresses.push(client.address);
   const contract = await client.tx.compute.instantiateContract(
     {
       sender: client.address,
       code_id: codeId,
-      init_msg: { parlament: [client.address, client.address] },
+      init_msg: { parlament: parlamentAddresses },
       code_hash: contractCodeHash,
       label: "My contract" + Math.ceil(Math.random() * 10000),
     },
