@@ -11,6 +11,8 @@ import axios from "@/types/axiosSetUp";
 import secretjsService from "@/services/secretjs.service";
 import { Ipfs, SaveExam } from "@/services/types";
 import { generateInfo, generateTree } from "@/services/merkleTree";
+import { StaticForm } from "@/components/Form";
+import { registerValues, signValues } from "@/components/Form/static/auth";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
@@ -62,6 +64,7 @@ export default function Home() {
     <>
       <Header></Header>
       <button onClick={handleClick}>Upload</button>
+      <StaticForm entity={signValues}></StaticForm>
       <main></main>
     </>
   );
