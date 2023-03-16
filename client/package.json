@@ -13,6 +13,7 @@
     "@next/font": "13.1.6",
     "@reduxjs/toolkit": "^1.9.3",
     "@rtk-query/codegen-openapi": "^1.0.0",
+    "@tanstack/react-table": "^8.7.9",
     "@types/node": "18.11.18",
     "@types/react": "18.0.27",
     "@types/react-dom": "18.0.10",

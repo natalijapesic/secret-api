@@ -29,6 +29,3 @@ const ExamAlert = ({ exam }: { exam: Exam }) => {
 };
 
 export default ExamAlert;
-
-//1678955096
-//1679041490

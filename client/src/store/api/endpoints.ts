@@ -55,9 +55,9 @@ const injectedRtkApi = api.injectEndpoints({
     }),
     uploadExam: build.mutation<UploadExamApiResponse, UploadExamApiArg>({
       query: (queryArg) => ({
-        url: `/exam/${queryArg.id}/upload`,
-        method: "PATCH",
-        params: { query: queryArg.query },
+        url: `/exam/upload`,
+        method: "POST",
+        body: queryArg.uploadQuestionsRequest,
       }),
     }),
     updateRelationExam: build.mutation<
@@ -73,7 +73,7 @@ const injectedRtkApi = api.injectEndpoints({
   }),
   overrideExisting: false,
 });
-export { injectedRtkApi as PimsApi };
+export { injectedRtkApi as SecretApi };
 export type SignInAuthApiResponse = /** status 201  */ AuthResponse;
 export type SignInAuthApiArg = {
   signUser: SignUser;
@@ -98,7 +98,7 @@ export type CreateExamApiResponse = /** status 201  */ Exam;
 export type CreateExamApiArg = {
   createExamRequest: CreateExamRequest;
 };
-export type FindAllExamApiResponse = /** status 200  */ object[];
+export type FindAllExamApiResponse = /** status 200  */ Exam[];
 export type FindAllExamApiArg = void;
 export type FindOneExamApiResponse = /** status 200  */ Exam;
 export type FindOneExamApiArg = {
@@ -113,10 +113,9 @@ export type RemoveExamApiResponse = unknown;
 export type RemoveExamApiArg = {
   id: string;
 };
-export type UploadExamApiResponse = /** status 200  */ UploadQuestionsResponse;
+export type UploadExamApiResponse = /** status 201  */ UploadQuestionsResponse;
 export type UploadExamApiArg = {
-  id: string;
-  query?: UploadQuestionsRequest;
+  uploadQuestionsRequest: UploadQuestionsRequest;
 };
 export type UpdateRelationExamApiResponse = /** status 200  */ Exam;
 export type UpdateRelationExamApiArg = {

@@ -6,7 +6,7 @@ const config: ConfigFile = {
     apiFile: './src/store/api.ts',
     apiImport: 'api',
     outputFile: './src/store/api/endpoints.ts',
-    exportName: 'PimsApi',
+    exportName: 'SecretApi',
     hooks: true,
 };
 
