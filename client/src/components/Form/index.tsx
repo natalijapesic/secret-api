@@ -1,8 +1,18 @@
 import { EditorMap } from "@/components/Editors/types";
+import Controlls from "@/components/Form/Controlls";
+import { useSignInAuthMutation, useSignUpAuthMutation } from "@/store/api/endpoints";
 import { useEffect } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 
-export const StaticForm = ({ entity }: { entity: any }) => {
+const StaticForm = ({
+  entity,
+  title,
+  submit,
+}: {
+  entity: any;
+  title: string;
+  submit: string;
+}) => {
   const methods = useForm({ defaultValues: entity });
 
   useEffect(() => {
@@ -10,9 +20,13 @@ export const StaticForm = ({ entity }: { entity: any }) => {
   }, [entity]);
 
   const { handleSubmit, control } = methods;
+  const [signIn] = useSignInAuthMutation();
+  const [signUp] = useSignUpAuthMutation();
 
-  const onSubmit = (data: any) => {
-    console.log(data);
+  const onSubmit = async (data: any) => {
+    // const response = await signIn({ signUser: data }).unwrap();
+    const response = await signUp({registerUser: data})
+    console.log(response);
   };
 
   return (
@@ -31,7 +45,10 @@ export const StaticForm = ({ entity }: { entity: any }) => {
             </div>
           );
         })}
+        <Controlls innerHTML="Submit" />
       </form>
     </FormProvider>
   );
 };
+
+export default StaticForm;
