@@ -30,6 +30,50 @@ const injectedRtkApi = api.injectEndpoints({
     getAllUser: build.query<GetAllUserApiResponse, GetAllUserApiArg>({
       query: () => ({ url: `/user` }),
     }),
+    createLocation: build.mutation<
+      CreateLocationApiResponse,
+      CreateLocationApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/location`,
+        method: "POST",
+        body: queryArg.createLocation,
+      }),
+    }),
+    findUsersLocationLocation: build.query<
+      FindUsersLocationLocationApiResponse,
+      FindUsersLocationLocationApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/location`,
+        params: { userId: queryArg.userId, examId: queryArg.examId },
+      }),
+    }),
+    findOneLocation: build.query<
+      FindOneLocationApiResponse,
+      FindOneLocationApiArg
+    >({
+      query: (queryArg) => ({ url: `/location/${queryArg.id}` }),
+    }),
+    updateLocation: build.mutation<
+      UpdateLocationApiResponse,
+      UpdateLocationApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/location/${queryArg.id}`,
+        method: "PATCH",
+        body: queryArg.updateLocation,
+      }),
+    }),
+    removeLocation: build.mutation<
+      RemoveLocationApiResponse,
+      RemoveLocationApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/location/${queryArg.id}`,
+        method: "DELETE",
+      }),
+    }),
     createExam: build.mutation<CreateExamApiResponse, CreateExamApiArg>({
       query: (queryArg) => ({
         url: `/exam`,
@@ -94,6 +138,29 @@ export type DeleteUserApiArg = {
 };
 export type GetAllUserApiResponse = /** status 200  */ UserResponse[];
 export type GetAllUserApiArg = void;
+export type CreateLocationApiResponse = /** status 201  */ LocationInfo;
+export type CreateLocationApiArg = {
+  createLocation: CreateLocation;
+};
+export type FindUsersLocationLocationApiResponse =
+  /** status 200  */ LocationInfo;
+export type FindUsersLocationLocationApiArg = {
+  userId: string;
+  examId: string;
+};
+export type FindOneLocationApiResponse = /** status 200  */ LocationInfo;
+export type FindOneLocationApiArg = {
+  id: string;
+};
+export type UpdateLocationApiResponse = /** status 200  */ LocationInfo;
+export type UpdateLocationApiArg = {
+  id: string;
+  updateLocation: UpdateLocation;
+};
+export type RemoveLocationApiResponse = unknown;
+export type RemoveLocationApiArg = {
+  id: string;
+};
 export type CreateExamApiResponse = /** status 201  */ Exam;
 export type CreateExamApiArg = {
   createExamRequest: CreateExamRequest;
@@ -143,6 +210,22 @@ export type UserResponse = {
   walletAddress?: string;
   username: string;
 };
+export type LocationInfo = {
+  id: string;
+  street: string;
+  number: string;
+  city: string;
+  municipality?: string;
+  users: object;
+  exams: object;
+};
+export type CreateLocation = {
+  street: string;
+  number: string;
+  city: string;
+  municipality?: string;
+};
+export type UpdateLocation = {};
 export type Exam = {
   id: string;
   name: string;
@@ -152,13 +235,6 @@ export type Exam = {
   isReady: boolean;
   users: object;
   locations: object;
-};
-export type LocationInfo = {
-  id: string;
-  street: string;
-  number: string;
-  city: string;
-  municipality?: string;
 };
 export type CreateExamRequest = {
   name: string;
@@ -193,6 +269,11 @@ export const {
   useGetUserQuery,
   useDeleteUserMutation,
   useGetAllUserQuery,
+  useCreateLocationMutation,
+  useFindUsersLocationLocationQuery,
+  useFindOneLocationQuery,
+  useUpdateLocationMutation,
+  useRemoveLocationMutation,
   useCreateExamMutation,
   useFindAllExamQuery,
   useFindOneExamQuery,

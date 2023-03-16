@@ -49,7 +49,6 @@ export class ExamController {
   }
 
   @Post('/upload')
-  // @DeepQuery('query', UploadQuestionsRequest)
   upload(
     @Body() query: UploadQuestionsRequest,
   ): Promise<UploadQuestionsResponse> {

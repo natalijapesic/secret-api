@@ -1,4 +1,4 @@
-import { LoadStrategy, PopulateHint } from '@mikro-orm/core';
+import { LoadStrategy } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/postgresql';
 import {
@@ -13,7 +13,6 @@ import { CreateExamRequest } from 'modules/exam/dto/create-exam.request';
 import { UpdateExamRequest } from 'modules/exam/dto/update-exam.request';
 import { UploadQuestionsRequest } from 'modules/exam/dto/upload-questions.request';
 import { UploadQuestionsResponse } from 'modules/exam/dto/upload-questions.response';
-import { lengthOpFromJSON } from 'secretjs/dist/protobuf/confio/proofs';
 
 @Injectable()
 export class ExamService {
