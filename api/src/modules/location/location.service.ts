@@ -29,7 +29,6 @@ export class LocationService {
       },
       {
         strategy: LoadStrategy.SELECT_IN,
-        populate: ['users', 'exams'],
       },
     );
 
