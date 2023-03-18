@@ -1,6 +1,6 @@
 import { Exam } from "@/store/api/endpoints";
 
 export interface LoadDataAction {
-  data: Exam[] | null;
+  data: Exam[];
   isError: boolean;
 }

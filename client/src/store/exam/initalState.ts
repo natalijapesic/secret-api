@@ -1,7 +1,7 @@
 import { Exam } from "@/store/api/endpoints";
 
 export interface ExamState {
-  data: Exam[] | null;
+  data: Exam[];
   isError: boolean;
 }
 

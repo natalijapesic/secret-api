@@ -10,6 +10,7 @@ import axios from "@/types/axiosSetUp";
 import secretjsService from "@/services/secretjs.service";
 import { Ipfs, SaveExam } from "@/services/types";
 import { generateInfo, generateTree } from "@/services/merkleTree";
+import ExamGrid from "@/components/ExamGrid";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {

@@ -40,9 +40,9 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.createLocation,
       }),
     }),
-    findUsersLocationLocation: build.query<
-      FindUsersLocationLocationApiResponse,
-      FindUsersLocationLocationApiArg
+    findUsersLocation: build.query<
+      FindUsersLocationApiResponse,
+      FindUsersLocationApiArg
     >({
       query: (queryArg) => ({
         url: `/location`,
@@ -142,9 +142,8 @@ export type CreateLocationApiResponse = /** status 201  */ LocationInfo;
 export type CreateLocationApiArg = {
   createLocation: CreateLocation;
 };
-export type FindUsersLocationLocationApiResponse =
-  /** status 200  */ LocationInfo;
-export type FindUsersLocationLocationApiArg = {
+export type FindUsersLocationApiResponse = /** status 200  */ LocationInfo;
+export type FindUsersLocationApiArg = {
   userId: string;
   examId: string;
 };
@@ -270,7 +269,7 @@ export const {
   useDeleteUserMutation,
   useGetAllUserQuery,
   useCreateLocationMutation,
-  useFindUsersLocationLocationQuery,
+  useFindUsersLocationQuery,
   useFindOneLocationQuery,
   useUpdateLocationMutation,
   useRemoveLocationMutation,

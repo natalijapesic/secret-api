@@ -8,7 +8,8 @@ export const examSlice = createSlice({
   initialState,
   reducers: {
     loadData: (state, action: PayloadAction<LoadDataAction>) => {
-      state = action.payload;
+      state.data = action.payload.data;
+      state.isError = action.payload.isError;
     },
     appendEntity: (state, action: PayloadAction<Exam>) => {
       if (action.payload && state.data) state.data.push(action.payload);
@@ -28,6 +29,5 @@ export const examSlice = createSlice({
 export const { loadData, appendEntity, updateEntity } = examSlice.actions;
 
 export * from "./selectors";
-export * from "./thunks";
 
 export default examSlice.reducer;
