@@ -10,15 +10,13 @@ import { FilterMatchMode } from "primereact/api";
 
 const ExamGrid = () => {
   const [globalFilterValue, setGlobalFilterValue] = useState("");
-  const { loadExams } = useExamPage();
+  
   const exams = useSelector((state: RootState) => selectExamsData(state));
   const [filters, setFilters] = useState({
     global: { value: "", matchMode: FilterMatchMode.CONTAINS },
   });
   
-  useEffect(() => {
-    loadExams();
-  }, []);
+
 
   const onGlobalFilterChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;

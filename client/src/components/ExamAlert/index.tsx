@@ -1,31 +1,17 @@
-import { Exam } from "@/store/api/endpoints";
-import styles from "./styles.module.css";
+import ExamAlert from "@/components/ExamAlert/Alert";
+import { RootState } from "@/store";
+import { selectExamsData } from "@/store/exam";
+import { useSelector } from "react-redux";
 
-const ExamAlert = ({ exam }: { exam: Exam }) => {
-  const upcoming = () => {
-    const offset = Math.abs(
-      new Date(exam.time).getTime() - new Date().getTime()
-    );
-
-    const hours = offset / (60 * 60 * 1000);
-
-    return hours <= 24;
-  };
-
+const AlertList = () => {
+  const exams = useSelector((state: RootState) => selectExamsData(state));
   return (
-    <div className={styles["alert-container"]}>
-      <header>
-        <span>#{exam.contractId}</span>
-        <span>
-          {exam.course} - {exam.name}
-        </span>
-        <button onClick={upcoming}> Upcoming </button>
-      </header>
-      <div>
-        
-      </div>
+    <div>
+      {exams.map((exam) => (
+        <ExamAlert key={exam.id} exam={exam} />
+      ))}
     </div>
   );
 };
 
-export default ExamAlert;
+export default AlertList;

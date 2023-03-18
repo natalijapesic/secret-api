@@ -37,7 +37,7 @@ export class LocationController {
   }
 
   @Get()
-  async findUsersLocation(
+  async findUsers(
     @Query() request: UsersLocation,
   ): Promise<LocationInfo> {
     return await this.locationService.findUsersLocation(request);
