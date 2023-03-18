@@ -30,7 +30,7 @@ export class ExamController {
   }
 
   @Get()
-  async findAll(){
+  async findAll(): Promise<Exam[]> {
     Logger.log('ovde');
     return await this.examService.findAll();
   }
@@ -48,9 +48,7 @@ export class ExamController {
     return this.examService.update(id, payload);
   }
 
-
   @Post('/upload')
-  // @DeepQuery('query', UploadQuestionsRequest)
   upload(
     @Body() query: UploadQuestionsRequest,
   ): Promise<UploadQuestionsResponse> {
