@@ -40,14 +40,11 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.createLocation,
       }),
     }),
-    findUsersLocation: build.query<
-      FindUsersLocationApiResponse,
-      FindUsersLocationApiArg
+    findAllLocation: build.query<
+      FindAllLocationApiResponse,
+      FindAllLocationApiArg
     >({
-      query: (queryArg) => ({
-        url: `/location`,
-        params: { userId: queryArg.userId, examId: queryArg.examId },
-      }),
+      query: () => ({ url: `/location` }),
     }),
     findOneLocation: build.query<
       FindOneLocationApiResponse,
@@ -128,7 +125,7 @@ export type SignUpAuthApiResponse = /** status 201  */ AuthResponse;
 export type SignUpAuthApiArg = {
   registerUser: RegisterUser;
 };
-export type GetUserApiResponse = /** status 200  */ UserResponse;
+export type GetUserApiResponse = /** status 200  */ LocationInfo[];
 export type GetUserApiArg = {
   id: string;
 };
@@ -142,11 +139,8 @@ export type CreateLocationApiResponse = /** status 201  */ LocationInfo;
 export type CreateLocationApiArg = {
   createLocation: CreateLocation;
 };
-export type FindUsersLocationApiResponse = /** status 200  */ LocationInfo;
-export type FindUsersLocationApiArg = {
-  userId: string;
-  examId: string;
-};
+export type FindAllLocationApiResponse = /** status 200  */ object[];
+export type FindAllLocationApiArg = void;
 export type FindOneLocationApiResponse = /** status 200  */ LocationInfo;
 export type FindOneLocationApiArg = {
   id: string;
@@ -202,29 +196,6 @@ export type RegisterUser = {
   email: string;
   walletAddress?: string;
 };
-export type UserResponse = {
-  role: "admin" | "parlament" | "profesor" | "student" | "organization";
-  id: string;
-  email: string;
-  walletAddress?: string;
-  username: string;
-};
-export type LocationInfo = {
-  id: string;
-  street: string;
-  number: string;
-  city: string;
-  municipality?: string;
-  users: object;
-  exams: object;
-};
-export type CreateLocation = {
-  street: string;
-  number: string;
-  city: string;
-  municipality?: string;
-};
-export type UpdateLocation = {};
 export type Exam = {
   id: string;
   name: string;
@@ -235,11 +206,40 @@ export type Exam = {
   users: object;
   locations: object;
 };
+export type LocationInfo = {
+  id: string;
+  street: string;
+  number: string;
+  city: string;
+  time: number;
+  municipality?: string;
+  classroom: string;
+  users: object;
+  exam: Exam;
+};
+export type UserResponse = {
+  role: "admin" | "parlament" | "profesor" | "student" | "organization";
+  id: string;
+  email: string;
+  walletAddress?: string;
+  username: string;
+};
+export type CreateLocation = {
+  street: string;
+  number: string;
+  city: string;
+  municipality?: string;
+  time: number;
+  classroom: string;
+  examId: string;
+};
+export type UpdateLocation = {
+  userIds: string[];
+};
 export type CreateExamRequest = {
   name: string;
   time: number;
   course: string;
-  locations?: LocationInfo[];
 };
 export type UpdateExamRequest = {
   isReady: boolean;
@@ -269,7 +269,7 @@ export const {
   useDeleteUserMutation,
   useGetAllUserQuery,
   useCreateLocationMutation,
-  useFindUsersLocationQuery,
+  useFindAllLocationQuery,
   useFindOneLocationQuery,
   useUpdateLocationMutation,
   useRemoveLocationMutation,

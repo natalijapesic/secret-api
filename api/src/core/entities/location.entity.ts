@@ -3,6 +3,7 @@ import {
   Collection,
   Entity,
   ManyToMany,
+  ManyToOne,
   PrimaryKey,
   Property,
 } from '@mikro-orm/core';
@@ -23,12 +24,18 @@ export class LocationInfo extends BaseEntity<LocationInfo, 'id'> {
   @Property()
   city: string;
 
+  @Property()
+  time: number;
+
   @Property({ nullable: true })
   municipality?: string;
 
-  @ManyToMany(() => User, (user) => user.locations)
+  @Property()
+  classroom: string;
+
+  @ManyToMany(() => User, (user) => user.locations, { hidden: true })
   users = new Collection<User>(this);
 
-  @ManyToMany(() => Exam, (exam) => exam.locations)
-  exams = new Collection<Exam>(this);
+  @ManyToOne(() => Exam)
+  exam: Exam;
 }

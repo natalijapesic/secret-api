@@ -3,6 +3,8 @@ import {
   Collection,
   Entity,
   ManyToMany,
+  ManyToOne,
+  OneToMany,
   PrimaryKey,
   Property,
 } from '@mikro-orm/core';
@@ -33,6 +35,6 @@ export class Exam extends BaseEntity<Exam, 'id'> {
   @ManyToMany(() => User)
   users = new Collection<User>(this);
 
-  @ManyToMany(() => LocationInfo)
+  @OneToMany(() => LocationInfo, (location) => location.exam)
   locations = new Collection<LocationInfo>(this);
 }
