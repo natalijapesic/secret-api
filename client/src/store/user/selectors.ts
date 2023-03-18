@@ -1,5 +1,12 @@
 import { RootState } from "@/store";
+import { User } from "@/store/user/types";
 
-export const selectExamsState = (state: RootState) => state.exam;
+export const selectUser = (state: RootState): User => {
+  return {
+    id: state.user.id,
+    role: state.user.role,
+    username: state.user.username,
+  };
+};
 
-export const selectExamsData = (state: RootState) => state.exam.data;
+export const selectLocations = (state: RootState) => state.user.locations;

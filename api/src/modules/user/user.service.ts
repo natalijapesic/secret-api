@@ -30,17 +30,6 @@ export class UserService {
     return user;
   }
 
-  // async get(id: string): Promise<UserResponse> {
-  //   const user = await this.userRepository.findOne({
-  //     id,
-  //   });
-
-  //   if (!user) throw new NotFoundException(['User doesnt exist']);
-  //   const { password, jmbg, ...response } = user;
-
-  //   return response;
-  // }
-
   async isParlament(address: string): Promise<boolean> {
     const user = this.userRepository.find({ walletAddress: { $eq: address } });
 

@@ -2,10 +2,12 @@ import { api } from "@/store/api";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 import examReducer from "./exam/index";
+import userReducer from "./user/index";
 
 const rootReducer = combineReducers({
   [api.reducerPath]: api.reducer,
   exam: examReducer,
+  user: userReducer,
 });
 export const store = configureStore({
   reducer: rootReducer,
