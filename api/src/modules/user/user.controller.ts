@@ -10,7 +10,7 @@ export class UserController {
   @Inject(UserService)
   private readonly service: UserService;
 
-  @Get(':id')
+  @Get(':id/loadLocations')
   async loadLocations(@Param('id') id: string): Promise<LocationInfo[]> {
     return await this.service.loadLocations(id);
   }

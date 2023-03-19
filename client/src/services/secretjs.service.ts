@@ -4,7 +4,6 @@ import {
   MsgExecuteContractResponse,
   SecretNetworkClient,
   TxResponse,
-  Wallet,
 } from "secretjs";
 
 const chainId = "secretdev-1";

@@ -25,13 +25,13 @@ const injectedRtkApi = api.injectEndpoints({
       LoadLocationsUserApiResponse,
       LoadLocationsUserApiArg
     >({
-      query: (queryArg) => ({ url: `/user/${queryArg.id}` }),
-    }),
-    deleteUser: build.mutation<DeleteUserApiResponse, DeleteUserApiArg>({
-      query: (queryArg) => ({ url: `/user/${queryArg.id}`, method: "DELETE" }),
+      query: (queryArg) => ({ url: `/user/${queryArg.id}/loadLocations` }),
     }),
     getAllUser: build.query<GetAllUserApiResponse, GetAllUserApiArg>({
       query: () => ({ url: `/user` }),
+    }),
+    deleteUser: build.mutation<DeleteUserApiResponse, DeleteUserApiArg>({
+      query: (queryArg) => ({ url: `/user/${queryArg.id}`, method: "DELETE" }),
     }),
     createLocation: build.mutation<
       CreateLocationApiResponse,
@@ -132,12 +132,12 @@ export type LoadLocationsUserApiResponse = /** status 200  */ LocationInfo[];
 export type LoadLocationsUserApiArg = {
   id: string;
 };
+export type GetAllUserApiResponse = /** status 200  */ UserResponse[];
+export type GetAllUserApiArg = void;
 export type DeleteUserApiResponse = /** status 200  */ string;
 export type DeleteUserApiArg = {
   id: string;
 };
-export type GetAllUserApiResponse = /** status 200  */ UserResponse[];
-export type GetAllUserApiArg = void;
 export type CreateLocationApiResponse = /** status 201  */ LocationInfo;
 export type CreateLocationApiArg = {
   createLocation: CreateLocation;
@@ -273,8 +273,8 @@ export const {
   useGetUserInfoAuthQuery,
   useSignUpAuthMutation,
   useLoadLocationsUserQuery,
-  useDeleteUserMutation,
   useGetAllUserQuery,
+  useDeleteUserMutation,
   useCreateLocationMutation,
   useFindAllLocationQuery,
   useFindOneLocationQuery,

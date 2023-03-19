@@ -2,6 +2,7 @@ import secretjsService from "@/services/secretjs.service";
 import { ClientContext } from "@/types/clientContext";
 import { FC, ReactNode, useEffect, useState } from "react";
 import { SecretNetworkClient } from "secretjs";
+
 export type ClientProps = {
   children?: ReactNode;
 };

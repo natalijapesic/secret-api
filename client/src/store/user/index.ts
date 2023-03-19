@@ -2,7 +2,6 @@ import { AuthResponse, LocationInfo } from "@/store/api/endpoints";
 import { initialState } from "@/store/user/initalState";
 import { Role } from "@/store/user/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { SecretNetworkClient } from "secretjs";
 
 export const userSlice = createSlice({
   name: "user",
