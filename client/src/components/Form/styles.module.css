@@ -1,0 +1,35 @@
+.form-container {
+  display: grid;
+  grid-template-columns: 30% 40% 30%;
+  grid-template-rows: 10% 40% 30%;
+  height: var(--size-full);
+}
+
+.form-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 2;
+  grid-row-end: 4;
+  justify-self: center;
+  border-style: ridge;
+  width: var(--size-full);
+  height: var(--size-full);
+  background-color: var(--color-white);
+}
+
+.app-header {
+  color: var(--color-red-500);
+  padding-bottom: var(--size-24);
+  font-size: var(--font-5xl);
+  font-weight: var(--font-weight-bold);
+}
+
+.title {
+  color: var(--color-red);
+  font-size: var(--font-2xl);
+  font-weight: var(--font-weight-bold);
+  padding: var(--size-5);
+}

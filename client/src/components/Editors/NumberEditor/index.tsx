@@ -7,8 +7,7 @@ export function NumberEditor({ field, property }: EditorProps) {
 
   return (
     <div className={styles["editor__container"]}>
-      <label className={styles["editor__label"]}>{property}</label>
-      <input {...register(property)} {...field} type="number" />
+      <input {...register(property)} {...field} type="number" placeholder={property} />
     </div>
   );
 }

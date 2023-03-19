@@ -7,8 +7,7 @@ export default function TextEditor({ field, property }: EditorProps) {
 
   return (
     <div className={styles["editor__container"]}>
-      <label className={styles["editor__label"]}>{property}</label>
-      <input {...register(property)} {...field} />
+      <input {...register(property)} {...field} placeholder={property} />
     </div>
   );
 }
