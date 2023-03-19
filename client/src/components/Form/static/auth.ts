@@ -5,12 +5,10 @@ export const signValues: SignUser = {
   username: "",
 };
 
-export const registerValues: RegisterUser = {
+export const registerValues: Partial<RegisterUser> = {
   email: "",
   jmbg: "",
   name: "",
   password: "",
-  role: "student",
   username: "",
-  walletAddress: "wallet",
 };

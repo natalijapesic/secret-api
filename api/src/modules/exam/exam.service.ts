@@ -76,6 +76,7 @@ export class ExamService {
 
     const exam = await this.examRepository.findOne(
       {
+        id: { $eq: payload.examId },
         isReady: { $eq: true },
       },
       {

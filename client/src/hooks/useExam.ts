@@ -1,9 +1,10 @@
 import { AppDispatch } from "@/store";
 import { useDispatch } from "react-redux";
-import { SecretApi as Api } from "@/store/api/endpoints";
+import { LocationInfo, SecretApi as Api } from "@/store/api/endpoints";
 import { loadData } from "@/store/exam";
+import { loadLocations } from "@/store/user";
 
-export const useExamPage = () => {
+export const useExam = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const loadExams = async () => {
@@ -19,18 +20,14 @@ export const useExamPage = () => {
     );
   };
 
-  const loadLocation = async (userId: string, examId: string) => {
-    const { data, isError } = await dispatch(
-      Api.endpoints["findUsersLocation"].initiate({ userId, examId })
+  const loadExamLocations = async (userId: string) => {
+    const { data } = await dispatch(
+      Api.endpoints["loadLocationsUser"].initiate({ id: userId })
     );
+    const response = data as LocationInfo[];
 
-    // dispatch(
-    //   loadData({
-    //     data: data ? data : null,
-    //     isError,
-    //   })
-    // );
+    dispatch(loadLocations(response));
   };
 
-  return { loadExams, loadLocation };
+  return { loadExams, loadExamLocations };
 };

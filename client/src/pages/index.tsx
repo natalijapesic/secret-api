@@ -4,18 +4,17 @@ import {
   UploadQuestionsRequest,
   UploadQuestionsResponse,
 } from "@/store/api/endpoints";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/store";
 import axios from "@/types/axiosSetUp";
 import secretjsService from "@/services/secretjs.service";
 import { Ipfs, SaveExam } from "@/services/types";
 import { generateInfo, generateTree } from "@/services/merkleTree";
-import ExamGrid from "@/components/ExamGrid";
+import { useContext } from "react";
+import { ClientContext } from "@/types/clientContext";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
-  const dispatch = useDispatch<AppDispatch>();
-  // const client = useRef<SecretNetworkClient | null>(null);
+  const { client } = useContext(ClientContext);
 
   const uploadExam = async (
     request: UploadQuestionsRequest
@@ -27,7 +26,6 @@ export default function Home() {
   };
 
   const handleClick = async () => {
-    const client = await secretjsService.initializeClient();
     const response = await uploadExam({
       questions: [
         {
@@ -42,8 +40,8 @@ export default function Home() {
         },
       ],
       walletAddres: "secret1ypjgplhk9x7attdf90jnzwp0h7p7zlhp08w0w2",
+      examId: "887e55e9-5dc6-4729-a5b1-f6d6a39f7386",
     });
-    console.log(response);
     const merkleTreeInfo = generateInfo(
       generateTree(response.organizationAddresses),
       2
@@ -55,7 +53,7 @@ export default function Home() {
       start_time: "1678627122",
     };
 
-    await secretjsService.saveExamTx(request, client);
+    await secretjsService.saveExamTx(request, client!);
   };
 
   return (

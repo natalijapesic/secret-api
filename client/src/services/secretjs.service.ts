@@ -4,7 +4,6 @@ import {
   MsgExecuteContractResponse,
   SecretNetworkClient,
   TxResponse,
-  Wallet,
 } from "secretjs";
 
 const chainId = "secretdev-1";
@@ -93,6 +92,9 @@ class SecretJsService {
     request: SaveExam,
     client: SecretNetworkClient
   ): Promise<ExamResponse> {
+    if (client) {
+      console.log(client);
+    }
     const tx: TxResponse = await client.tx.compute.executeContract(
       {
         sender: client.address,

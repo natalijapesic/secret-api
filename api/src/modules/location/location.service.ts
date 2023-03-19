@@ -1,16 +1,24 @@
 import { EntityRepository, LoadStrategy } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { LocationInfo } from 'core/entities';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
+import { Exam, LocationInfo, User } from 'core/entities';
 import { CreateLocation } from 'modules/location/dto/create-location.request';
 import { UpdateLocation } from 'modules/location/dto/update-location.request';
-import { UsersLocation } from 'modules/location/dto/users-location.request';
 
 @Injectable()
 export class LocationService {
   constructor(
     @InjectRepository(LocationInfo)
     private readonly locationRepository: EntityRepository<LocationInfo>,
+    @InjectRepository(Exam)
+    private readonly examRepository: EntityRepository<Exam>,
+    @InjectRepository(User)
+    private readonly userRepository: EntityRepository<User>,
   ) {}
 
   async findOne(id: string) {
@@ -21,26 +29,20 @@ export class LocationService {
     return location;
   }
 
-  async findUsersLocation(request: UsersLocation) {
-    const location = await this.locationRepository.findOne(
-      {
-        users: { id: { $eq: request.userId } },
-        exams: { id: { $eq: request.examId } },
-      },
-      {
-        strategy: LoadStrategy.SELECT_IN,
-      },
-    );
-
-    return location;
-  }
-
   async findAll() {
-    return this.locationRepository.findAll({ populate: ['users', 'exams'] });
+    return this.locationRepository.findAll({ populate: ['exam'] });
   }
 
   async create(request: CreateLocation) {
-    const location = this.locationRepository.create(request);
+    const exam = await this.examRepository.findOne(request.examId);
+    Logger.log(exam.time);
+    if (exam.time !== request.time)
+      throw new BadRequestException('Time must be same');
+
+    const location = this.locationRepository.create({
+      ...request,
+      exam: request.examId,
+    });
 
     await this.locationRepository.persistAndFlush(location);
 
@@ -50,7 +52,11 @@ export class LocationService {
   async update(id: string, request: UpdateLocation) {
     const location = await this.findOne(id);
 
-    location.assign(request);
+    const users = request.userIds.map((user) =>
+      this.userRepository.getReference(user),
+    );
+
+    location.assign({ ...request, users });
 
     await this.locationRepository.persistAndFlush(location);
 

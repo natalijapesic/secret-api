@@ -1,11 +1,10 @@
-import { Exam } from "@/store/api/endpoints";
+import { LocationInfo } from "@/store/api/endpoints";
 import ago from "s-ago";
 import styles from "./styles.module.css";
 
-const ExamAlert = ({ exam }: { exam: Exam }) => {
-  const test = ago(
-    new Date(new Date(exam.time * 1000))
-  );
+const ExamAlert = ({ location }: { location: LocationInfo }) => {
+  const exam = location.exam;
+  const test = ago(new Date(new Date(exam.time * 1000)));
   console.log(test);
 
   return (

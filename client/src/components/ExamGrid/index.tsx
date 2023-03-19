@@ -1,6 +1,6 @@
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { useExamPage } from "@/hooks/useExam";
+import { useExam } from "@/hooks/useExam";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { selectExamsData } from "@/store/exam";
@@ -10,13 +10,11 @@ import { FilterMatchMode } from "primereact/api";
 
 const ExamGrid = () => {
   const [globalFilterValue, setGlobalFilterValue] = useState("");
-  
+
   const exams = useSelector((state: RootState) => selectExamsData(state));
   const [filters, setFilters] = useState({
     global: { value: "", matchMode: FilterMatchMode.CONTAINS },
   });
-  
-
 
   const onGlobalFilterChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;

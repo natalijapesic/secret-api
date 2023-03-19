@@ -2,6 +2,7 @@ import { Controller, Delete, Get, Inject, Param } from '@nestjs/common';
 import { UserResponse } from './dto/user.response';
 import { UserService } from './user.service';
 import { ApiTags } from '@nestjs/swagger';
+import { LocationInfo } from 'core/entities';
 
 @ApiTags('User')
 @Controller('user')
@@ -9,9 +10,9 @@ export class UserController {
   @Inject(UserService)
   private readonly service: UserService;
 
-  @Get(':id')
-  public get(@Param('id') id: string): Promise<UserResponse> {
-    return this.service.get(id);
+  @Get(':id/loadLocations')
+  async loadLocations(@Param('id') id: string): Promise<LocationInfo[]> {
+    return await this.service.loadLocations(id);
   }
 
   @Get()
