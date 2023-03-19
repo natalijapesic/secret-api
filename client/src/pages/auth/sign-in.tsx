@@ -1,14 +1,20 @@
 import StaticForm from "@/components/Form";
 import { signValues } from "@/components/Form/static/auth";
-import { useSignInAuthMutation } from "@/store/api/endpoints";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function SignIn() {
+  const { signIn } = useAuth();
+
+  const onSubmit = (data: any) => {
+    signIn(data);
+  };
   return (
     <div>
       <StaticForm
         entity={signValues}
-        title={"Create Account"}
+        title={"Enter Account"}
         submit={"Sign In"}
+        onSubmit={onSubmit}
       ></StaticForm>
     </div>
   );

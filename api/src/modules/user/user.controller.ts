@@ -11,7 +11,7 @@ export class UserController {
   private readonly service: UserService;
 
   @Get(':id')
-  async get(@Param('id') id: string): Promise<LocationInfo[]> {
+  async loadLocations(@Param('id') id: string): Promise<LocationInfo[]> {
     return await this.service.loadLocations(id);
   }
 

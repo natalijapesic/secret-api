@@ -1,6 +1,6 @@
 import { UserResponse } from 'modules/user/dto/user.response';
 
 export class AuthResponse {
-  access_token: string;
+  token: string;
   user: UserResponse;
 }

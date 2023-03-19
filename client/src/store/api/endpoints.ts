@@ -21,7 +21,10 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.registerUser,
       }),
     }),
-    getUser: build.query<GetUserApiResponse, GetUserApiArg>({
+    loadLocationsUser: build.query<
+      LoadLocationsUserApiResponse,
+      LoadLocationsUserApiArg
+    >({
       query: (queryArg) => ({ url: `/user/${queryArg.id}` }),
     }),
     deleteUser: build.mutation<DeleteUserApiResponse, DeleteUserApiArg>({
@@ -125,8 +128,8 @@ export type SignUpAuthApiResponse = /** status 201  */ AuthResponse;
 export type SignUpAuthApiArg = {
   registerUser: RegisterUser;
 };
-export type GetUserApiResponse = /** status 200  */ LocationInfo[];
-export type GetUserApiArg = {
+export type LoadLocationsUserApiResponse = /** status 200  */ LocationInfo[];
+export type LoadLocationsUserApiArg = {
   id: string;
 };
 export type DeleteUserApiResponse = /** status 200  */ string;
@@ -182,7 +185,17 @@ export type UpdateRelationExamApiArg = {
   id: string;
   updateUserRelation: UpdateUserRelation;
 };
-export type AuthResponse = {};
+export type UserResponse = {
+  role: "admin" | "parlament" | "profesor" | "student" | "organization";
+  id: string;
+  email: string;
+  walletAddress?: string;
+  username: string;
+};
+export type AuthResponse = {
+  token: string;
+  user: UserResponse;
+};
 export type SignUser = {
   username: string;
   password: string;
@@ -216,13 +229,6 @@ export type LocationInfo = {
   classroom: string;
   users: object;
   exam: Exam;
-};
-export type UserResponse = {
-  role: "admin" | "parlament" | "profesor" | "student" | "organization";
-  id: string;
-  email: string;
-  walletAddress?: string;
-  username: string;
 };
 export type CreateLocation = {
   street: string;
@@ -265,7 +271,7 @@ export const {
   useSignInAuthMutation,
   useGetUserInfoAuthQuery,
   useSignUpAuthMutation,
-  useGetUserQuery,
+  useLoadLocationsUserQuery,
   useDeleteUserMutation,
   useGetAllUserQuery,
   useCreateLocationMutation,

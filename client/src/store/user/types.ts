@@ -14,14 +14,13 @@ export enum Role {
 }
 
 export interface User {
-  id?: string;
+  id: string | null;
   role: Role;
-  username?: string;
+  username: string | null;
 }
 
 export interface UserState {
-  id?: string;
-  role: Role;
-  username?: string;
+  user: User;
   locations: LocationInfo[];
+  token: string | null;
 }

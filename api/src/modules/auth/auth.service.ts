@@ -4,11 +4,10 @@ import { verify, hash } from 'argon2';
 import { User } from 'core/entities';
 import { UserService } from 'modules/user/user.service';
 import { RegisterUser } from 'modules/user/dto/register-user.request';
-import { AuthResponse } from 'modules/auth/dto/auth-response';
 import { JwtPayload } from 'modules/auth/dto/jwt-payload.request';
 import { UserResponse } from 'modules/user/dto/user.response';
 import { SignUser } from 'modules/user/dto/sign-user.request';
-
+import { AuthResponse } from 'modules/auth/dto/auth-response.response';
 
 @Injectable()
 export class AuthService {
@@ -34,7 +33,7 @@ export class AuthService {
 
     return {
       user: response,
-      access_token: this.jwtTokenService.sign(payload),
+      token: this.jwtTokenService.sign(payload),
     };
   }
   async validateUserCredentials(
@@ -64,7 +63,7 @@ export class AuthService {
 
     const response: AuthResponse = {
       user: user,
-      access_token: this.jwtTokenService.sign(payload),
+      token: this.jwtTokenService.sign(payload),
     };
 
     return response;
