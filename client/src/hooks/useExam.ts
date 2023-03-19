@@ -4,7 +4,7 @@ import { LocationInfo, SecretApi as Api } from "@/store/api/endpoints";
 import { loadData } from "@/store/exam";
 import { loadLocations } from "@/store/user";
 
-export const useExamPage = () => {
+export const useExam = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const loadExams = async () => {
@@ -20,7 +20,7 @@ export const useExamPage = () => {
     );
   };
 
-  const loadLocation = async (userId: string, examId: string) => {
+  const loadExamLocations = async (userId: string) => {
     const { data } = await dispatch(
       Api.endpoints["loadLocationsUser"].initiate({ id: userId })
     );
@@ -29,5 +29,5 @@ export const useExamPage = () => {
     dispatch(loadLocations(response));
   };
 
-  return { loadExams, loadLocation };
+  return { loadExams, loadExamLocations };
 };

@@ -1,4 +1,5 @@
 import { api } from "@/store/api";
+import storeUser from "@/store/authMiddleware";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 import examReducer from "./exam/index";
@@ -12,7 +13,7 @@ const rootReducer = combineReducers({
 export const store = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(api.middleware),
+    getDefaultMiddleware().concat(api.middleware, storeUser),
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

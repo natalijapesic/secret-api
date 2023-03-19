@@ -20,7 +20,7 @@ export interface User {
 }
 
 export interface UserState {
-  user: User;
+  instance: User;
   locations: LocationInfo[];
   token: string | null;
 }

@@ -8,9 +8,9 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     loadUser: (state, action: PayloadAction<AuthResponse>) => {
-      state.user.id = action.payload.user.id;
-      state.user.role = action.payload.user.role as Role;
-      state.user.username = action.payload.user.username;
+      state.instance.id = action.payload.user.id;
+      state.instance.role = action.payload.user.role as Role;
+      state.instance.username = action.payload.user.username;
       state.token = action.payload.token;
     },
     loadLocations: (state, action: PayloadAction<LocationInfo[]>) => {

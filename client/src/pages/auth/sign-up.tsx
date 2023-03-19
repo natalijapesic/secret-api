@@ -10,13 +10,11 @@ export default function SignUp() {
   };
 
   return (
-    <div>
-      <StaticForm
-        entity={registerValues}
-        title={"Create Account"}
-        submit={"Sign Up"}
-        onSubmit={onSubmit}
-      ></StaticForm>
-    </div>
+    <StaticForm
+      entity={registerValues}
+      title={"Create Account"}
+      submit={"Sign Up"}
+      onSubmit={onSubmit}
+    ></StaticForm>
   );
 }
