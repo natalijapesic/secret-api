@@ -263,6 +263,7 @@ export type Question = {
 export type UploadQuestionsRequest = {
   questions: Question[];
   walletAddres: string;
+  examId: string;
 };
 export type UpdateUserRelation = {
   userIds: string[];

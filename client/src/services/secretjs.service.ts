@@ -93,6 +93,9 @@ class SecretJsService {
     request: SaveExam,
     client: SecretNetworkClient
   ): Promise<ExamResponse> {
+    if (client) {
+      console.log(client);
+    }
     const tx: TxResponse = await client.tx.compute.executeContract(
       {
         sender: client.address,
