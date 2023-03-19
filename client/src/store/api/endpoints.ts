@@ -240,7 +240,8 @@ export type CreateLocation = {
   examId: string;
 };
 export type UpdateLocation = {
-  userIds: string[];
+  userIds?: string[];
+  examId?: string;
 };
 export type CreateExamRequest = {
   name: string;

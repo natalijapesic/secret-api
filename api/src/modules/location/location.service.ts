@@ -51,12 +51,17 @@ export class LocationService {
 
   async update(id: string, request: UpdateLocation) {
     const location = await this.findOne(id);
+    location.assign({ ...request });
 
-    const users = request.userIds.map((user) =>
+    const users = request.userIds?.map((user) =>
       this.userRepository.getReference(user),
     );
 
-    location.assign({ ...request, users });
+    if (users) location.assign({ users });
+
+    const exam = this.examRepository.getReference(request.examId);
+
+    if (exam) location.assign({ exam });
 
     await this.locationRepository.persistAndFlush(location);
 

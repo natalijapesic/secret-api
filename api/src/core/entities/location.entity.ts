@@ -24,18 +24,18 @@ export class LocationInfo extends BaseEntity<LocationInfo, 'id'> {
   @Property()
   city: string;
 
-  @Property()
+  @Property({ nullable: true })
   time: number;
 
   @Property({ nullable: true })
   municipality?: string;
 
-  @Property()
+  @Property({ nullable: true })
   classroom: string;
 
   @ManyToMany(() => User, (user) => user.locations, { hidden: true })
   users = new Collection<User>(this);
 
-  @ManyToOne(() => Exam)
+  @ManyToOne(() => Exam, { nullable: true })
   exam: Exam;
 }
