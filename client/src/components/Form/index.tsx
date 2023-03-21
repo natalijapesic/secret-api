@@ -1,5 +1,6 @@
+import Button from "@/components/Button";
 import { EditorMap } from "@/components/Editors/types";
-import Controlls from "@/components/Form/Controlls";
+import Link from "next/link";
 import { useEffect } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import styles from "./styles.module.css";
@@ -9,11 +10,15 @@ const StaticForm = ({
   title,
   submit,
   onSubmit,
+  route,
+  href,
 }: {
   entity: any;
   title: string;
   submit: string;
   onSubmit: (data: any) => void;
+  route: string;
+  href: string;
 }) => {
   const methods = useForm({ defaultValues: entity });
 
@@ -27,9 +32,9 @@ const StaticForm = ({
     <div className={styles["form-container"]}>
       <div className={styles["form-item"]}>
         <header className={styles["app-header"]}>Secret exam</header>
-        <span className={styles['title']}>{title}</span>
+        <span className={styles["title"]}>{title}</span>
         <FormProvider {...methods}>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form className={styles["form"]} onSubmit={handleSubmit(onSubmit)}>
             {Object.keys(entity).map((property) => {
               const Editor = EditorMap[typeof property];
               return (
@@ -39,13 +44,18 @@ const StaticForm = ({
                     control={control}
                     rules={{ required: true }}
                     render={(props) => (
-                      <Editor {...props} property={property}  />
+                      <Editor {...props} property={property} />
                     )}
                   />
                 </div>
               );
             })}
-            <Controlls innerHTML="Submit" />
+            <div className={styles["form-controls"]}>
+              <Button variant={"primary"}>{submit}</Button>
+              <Button variant={"secondary"}>
+                <Link href={href}>{route}</Link>
+              </Button>
+            </div>
           </form>
         </FormProvider>
       </div>

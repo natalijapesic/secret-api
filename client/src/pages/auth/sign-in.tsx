@@ -14,6 +14,8 @@ export default function SignIn() {
       title={"Enter Account"}
       submit={"Sign In"}
       onSubmit={onSubmit}
+      href="/auth/sign-up"
+      route="Sign Up"
     ></StaticForm>
   );
 }

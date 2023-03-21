@@ -1,0 +1,17 @@
+.input-container {
+  display: inline-flex;
+  align-items: center;
+  height: var(--size-8);
+  width: 100%;
+}
+
+.input {
+  background-color: var(--color-white-100);
+  color: var(--color-grey-100);
+  padding-left: var(--size-2);
+  height: var(--size-12);
+  width: var(--size-full);
+  padding-top: var(--size-2) 0 var(--size-2) 0;
+  border: 1px solid var(--color-grey-100);
+  border-radius: 5px;
+}

@@ -1,8 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Righteous&display=swap');
+
+
 :root {
   font-size: 14px;
-  --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
-    "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
-    "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
 
   --size-full: 100%;
 
@@ -102,6 +102,10 @@
   --font-7xl: 4.5rem;
   --font-8xl: 5.25rem;
   --font-9xl: 6rem;
+
+  --font-family-heading: "Righteous";
+  --font-family-body: "Open Sans";
+  font-family: var(--font-family-body);
 
   --color-red: #ff5455;
   --color-red-500: #4a1414;
