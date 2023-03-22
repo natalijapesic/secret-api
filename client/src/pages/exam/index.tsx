@@ -13,10 +13,12 @@ const Exam = () => {
 
   return (
     <div className={styles["container"]}>
-      <div>
+      <div className={styles["container-item"]}>
+        <header className={styles["heading"]}>My Exams</header>
         <AlertList />
+        <header className={styles["heading"]}>Browse Exams</header>
+        <ExamGrid />
       </div>
-      <ExamGrid />
     </div>
   );
 };

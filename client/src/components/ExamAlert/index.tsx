@@ -4,6 +4,7 @@ import storageService from "@/services/storage.service";
 import { selectLocations } from "@/store/user";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
+import styles from "./styles.module.css";
 
 const AlertList = () => {
   const locations = useSelector(selectLocations);
@@ -16,7 +17,7 @@ const AlertList = () => {
   }, []);
 
   return (
-    <div>
+    <div className={styles["list-container"]}>
       {locations.map((location) => (
         <ExamAlert key={location.id} location={location} />
       ))}

@@ -59,8 +59,6 @@ export default function Home() {
   return (
     <>
       <Header></Header>
-      <button onClick={handleClick}>Upload</button>
-      <main></main>
     </>
   );
 }

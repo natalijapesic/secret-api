@@ -1,0 +1,55 @@
+.list-container {
+  display: flex;
+  width: var(--size-full);
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.exam-id {
+  color: var(--color-grey-200);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-xl);
+}
+
+.exam-name {
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-xl);
+}
+
+.alert-container {
+  display: grid;
+  grid-template-rows: 50% 50%;
+  row-gap: var(--size-6);
+  border: 1px solid var(--color-grey-100);
+  border-radius: var(--size-2);
+  width: 30%;
+  padding-left: var(--size-4);
+}
+
+.exam-info {
+  color: var(--color-grey-200);
+  font-weight: var(--font-weight-bold);
+  display: grid;
+  grid-template-columns: 60% 40%;
+  align-items: center;
+}
+
+.exam-location {
+  display: flex;
+  align-items: center;
+}
+
+.exam-classroom {
+  padding-left: var(--size-2);
+}
+
+.upcoming {
+  color: var(--color-red);
+  font-weight: var(--font-weight-semibold);
+}
+
+.exam-container {
+  display: grid;
+  grid-template-columns: 60% 40%;
+  align-items: center;
+}

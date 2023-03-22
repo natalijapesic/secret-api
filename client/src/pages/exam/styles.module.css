@@ -1,4 +1,20 @@
-.container{
-    display: flex;
-    flex-direction: column;
+.container {
+  display: grid;
+  grid-template-columns: 10% 80% 10%;
+  padding-top: var(--size-24);
+  align-items: center;
+}
+
+.container-item {
+  display: flex;
+  flex-direction: column;
+  grid-column-start: 2;
+  grid-column-end: 3;
+  gap: var(--size-8);
+}
+
+.heading {
+  color: var(--color-black);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-3xl);
 }
