@@ -12,16 +12,14 @@ export const examSlice = createSlice({
       state.isError = action.payload.isError;
     },
     appendEntity: (state, action: PayloadAction<Exam>) => {
-      if (action.payload && state.data) state.data.push(action.payload);
+      state.data.push(action.payload);
     },
     updateEntity: (state, action: PayloadAction<Exam>) => {
-      if (action.payload && state.data) {
-        const index = state.data.findIndex(
-          (entity) => entity.id === action.payload?.id
-        );
+      const index = state.data.findIndex(
+        (entity) => entity.id === action.payload?.id
+      );
 
-        state.data[index] = action.payload;
-      }
+      state.data[index] = action.payload;
     },
   },
 });

@@ -5,7 +5,7 @@
   height: var(--size-full);
 }
 
-.form-item {
+.form-item-auth {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -21,7 +21,7 @@
   background-color: var(--color-white);
 }
 
-.app-header {
+.form-title-auth {
   font-family: var(--font-family-heading);
   color: var(--color-red-500);
   padding-bottom: var(--size-24);
@@ -29,14 +29,14 @@
   font-weight: var(--font-weight-bold);
 }
 
-.title {
+.form-subtitle-auth {
   color: var(--color-red);
   font-size: var(--font-3xl);
   font-weight: var(--font-weight-bold);
   padding: var(--size-5);
 }
 
-.form {
+.form-auth {
   display: flex;
   flex-direction: column;
   gap: var(--size-4);
@@ -44,8 +44,45 @@
   width: var(--size-full);
 }
 
-.form-controls {
+.form-controls-auth {
   display: flex;
   gap: var(--size-4);
   padding-top: var(--size-6);
+}
+
+.form-item-exam {
+  display: flex;
+  flex-direction: column;
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 2;
+  gap: var(--size-4);
+  grid-row-end: 3;
+}
+
+.form-title-exam {
+  font-family: var(--font-family-heading);
+  color: var(--color-red-500);
+  font-size: var(--font-4xl);
+  font-weight: var(--font-weight-bold);
+  padding-bottom: var(--size-4);
+}
+
+.form-subtitle-exam {
+  color: var(--color-red-500);
+  font-size: var(--font-2xl);
+  font-weight: var(--font-weight-bold);
+  padding-bottom: var(--size-4);
+}
+
+.form-exam {
+  display: flex;
+  gap: var(--size-4);
+  width: var(--size-full);
+  align-items: center;
+}
+
+.form-controls-exam {
+  display: flex;
+  gap: var(--size-4);
 }

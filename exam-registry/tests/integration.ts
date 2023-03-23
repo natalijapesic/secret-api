@@ -1,5 +1,10 @@
 import axios from "axios";
-import { Wallet, SecretNetworkClient, fromUtf8 } from "secretjs";
+import {
+  Wallet,
+  SecretNetworkClient,
+  fromUtf8,
+  MsgExecuteContractResponse,
+} from "secretjs";
 import fs from "fs";
 import SHA256 from "crypto-js/sha256";
 import MerkleTree from "merkletreejs";
@@ -12,7 +17,7 @@ const parlamentAddresses = [
 ];
 type ExamResponse = {
   exam_id: number;
-  exam_time: string;
+  exam_time: number;
   ipfs: IpfsResponse;
 };
 
@@ -203,7 +208,7 @@ async function saveExamTx(
       msg: {
         save_exam: {
           course_name: "Math",
-          start_time: "1678627122",
+          start_time: 1678627122,
           orgs: {
             root: merkleData.root,
             leaves_count: "3",
@@ -218,14 +223,10 @@ async function saveExamTx(
     }
   );
   console.log(tx.rawLog);
-  console.log(fromUtf8(tx.data[0]));
 
-  const parsedTransactionData = fromUtf8(tx.data[0]);
-  console.log("save exam", parsedTransactionData);
-  console.log(`Save exam TX used ${tx.gasUsed} gas`);
-  console.log("Exam tx response", parsedTransactionData);
-
-  return JSON.parse(parsedTransactionData.replace("Y", "")) as ExamResponse;
+  return JSON.parse(
+    fromUtf8(MsgExecuteContractResponse.decode(tx.data[0]).data)
+  ) as ExamResponse;
 }
 
 async function startExamTx(
@@ -254,14 +255,9 @@ async function startExamTx(
     }
   );
 
-  console.log("raw log", tx.rawLog);
-
-  const parsedTransactionData = fromUtf8(tx.data[0]);
-  console.log("start exam", parsedTransactionData);
-  console.log(`start exam TX used ${tx.gasUsed} gas`);
-  console.log("Exam tx response", parsedTransactionData);
-
-  return JSON.parse(parsedTransactionData.replace("Y", "")) as ExamResponse;
+  return JSON.parse(
+    fromUtf8(MsgExecuteContractResponse.decode(tx.data[0]).data)
+  );
 }
 
 async function test_start_exam(
@@ -310,12 +306,9 @@ async function changeTimeTx(
 
   console.log(tx.rawLog);
 
-  const parsedTransactionData = fromUtf8(tx.data[0]);
-  console.log("save exam", parsedTransactionData);
-  console.log(`Save exam TX used ${tx.gasUsed} gas`);
-  console.log("Exam tx response", parsedTransactionData);
-
-  return JSON.parse(parsedTransactionData.replace("Y", "")) as ExamResponse;
+  return JSON.parse(
+    fromUtf8(MsgExecuteContractResponse.decode(tx.data[0]).data)
+  );
 }
 
 async function queryExam(

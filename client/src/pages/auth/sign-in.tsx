@@ -1,5 +1,5 @@
-import StaticForm from "@/components/Form";
-import { signValues } from "@/components/Form/static/auth";
+import StaticForm from "@/components/StaticForm";
+import { signValues } from "@/components/StaticForm/static/auth";
 import { useAuth } from "@/hooks/useAuth";
 
 export default function SignIn() {
@@ -11,8 +11,10 @@ export default function SignIn() {
   return (
     <StaticForm
       entity={signValues}
-      title={"Enter Account"}
-      submit={"Sign In"}
+      title="SecretExam"
+      variant="auth"
+      subtitle="Enter Account"
+      submit="Sign In"
       onSubmit={onSubmit}
       href="/auth/sign-up"
       route="Sign Up"

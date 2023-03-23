@@ -8,17 +8,21 @@ import styles from "./styles.module.css";
 const StaticForm = ({
   entity,
   title,
+  subtitle,
+  variant,
   submit,
   onSubmit,
   route,
   href,
 }: {
   entity: any;
+  subtitle: string;
+  variant: string;
   title: string;
   submit: string;
   onSubmit: (data: any) => void;
-  route: string;
-  href: string;
+  route?: string;
+  href?: string;
 }) => {
   const methods = useForm({ defaultValues: entity });
 
@@ -29,14 +33,20 @@ const StaticForm = ({
   const { handleSubmit, control } = methods;
 
   return (
-    <div className={styles["form-container"]}>
-      <div className={styles["form-item"]}>
-        <header className={styles["app-header"]}>Secret exam</header>
-        <span className={styles["title"]}>{title}</span>
+    <div className={styles[`form-container`]}>
+      <div className={styles[`form-item-${variant}`]}>
+        <header className={styles[`form-title-${variant}`]}>{title}</header>
+        <span className={styles[`form-subtitle-${variant}`]}>{subtitle}</span>
         <FormProvider {...methods}>
-          <form className={styles["form"]} onSubmit={handleSubmit(onSubmit)}>
-            {Object.keys(entity).map((property) => {
-              const Editor = EditorMap[typeof property];
+          <form
+            className={styles[`form-${variant}`]}
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            {Object.entries(entity).map(([property, value]) => {
+              const Editor = Array.isArray(value)
+                ? EditorMap["location"]
+                : EditorMap[typeof value];
+
               return (
                 <div key={property}>
                   <Controller
@@ -50,11 +60,13 @@ const StaticForm = ({
                 </div>
               );
             })}
-            <div className={styles["form-controls"]}>
+            <div className={styles[`form-controls-${variant}`]}>
               <Button variant={"primary"}>{submit}</Button>
-              <Button variant={"secondary"}>
-                <Link href={href}>{route}</Link>
-              </Button>
+              {href && (
+                <Button variant={"secondary"}>
+                  <Link href={href}>{route}</Link>
+                </Button>
+              )}
             </div>
           </form>
         </FormProvider>

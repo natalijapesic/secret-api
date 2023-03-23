@@ -116,6 +116,10 @@
   --color-grey-200: #a1a6b1;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 html {
   box-sizing: border-box;
 }
@@ -133,4 +137,6 @@ a {
 
 #__next {
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }

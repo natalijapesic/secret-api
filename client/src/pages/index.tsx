@@ -1,64 +1,26 @@
-import { Header } from "@/components/header";
-import { Inter } from "@next/font/google";
-import {
-  UploadQuestionsRequest,
-  UploadQuestionsResponse,
-} from "@/store/api/endpoints";
-import axios from "@/types/axiosSetUp";
-import secretjsService from "@/services/secretjs.service";
-import { Ipfs, SaveExam } from "@/services/types";
-import { generateInfo, generateTree } from "@/services/merkleTree";
-import { useContext } from "react";
-import { ClientContext } from "@/types/clientContext";
+import AlertList from "@/components/ExamAlert";
+import ExamGrid from "@/components/ExamGrid";
+import { useExam } from "@/hooks/useExam";
+import { useEffect } from "react";
+import styles from "./styles.module.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const Exam = () => {
+  const { loadExams } = useExam();
 
-export default function Home() {
-  const { client } = useContext(ClientContext);
-
-  const uploadExam = async (
-    request: UploadQuestionsRequest
-  ): Promise<UploadQuestionsResponse> => {
-    return await axios
-      .post<UploadQuestionsResponse>("/exam/upload", request)
-      .then((value) => value.data)
-      .catch((error) => error.response.data);
-  };
-
-  const handleClick = async () => {
-    const response = await uploadExam({
-      questions: [
-        {
-          text: "string",
-          options: ["string"],
-          answer: "string",
-        },
-        {
-          text: "string",
-          options: ["string"],
-          answer: "string",
-        },
-      ],
-      walletAddres: "secret1ypjgplhk9x7attdf90jnzwp0h7p7zlhp08w0w2",
-      examId: "887e55e9-5dc6-4729-a5b1-f6d6a39f7386",
-    });
-    const merkleTreeInfo = generateInfo(
-      generateTree(response.organizationAddresses),
-      2
-    );
-    const request: SaveExam = {
-      course_name: "ldkjs",
-      ipfs: response.ipfsInfo as Ipfs,
-      orgs: merkleTreeInfo,
-      start_time: "1678627122",
-    };
-
-    await secretjsService.saveExamTx(request, client!);
-  };
+  useEffect(() => {
+    loadExams();
+  }, []);
 
   return (
-    <>
-      <Header></Header>
-    </>
+    <div className={styles["container"]}>
+      <div className={styles["container-item"]}>
+        <header className={styles["heading"]}>My Exams</header>
+        <AlertList />
+        <header className={styles["heading"]}>Browse Exams</header>
+        <ExamGrid />
+      </div>
+    </div>
   );
-}
+};
+
+export default Exam;

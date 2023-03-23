@@ -1,8 +1,14 @@
 import { AppDispatch } from "@/store";
 import { useDispatch } from "react-redux";
-import { LocationInfo, SecretApi as Api } from "@/store/api/endpoints";
-import { loadData } from "@/store/exam";
+import {
+  CreateExamRequest,
+  Exam,
+  LocationInfo,
+  SecretApi as Api,
+} from "@/store/api/endpoints";
+import { appendEntity, loadData } from "@/store/exam";
 import { loadLocations } from "@/store/user";
+import { toast } from "react-toastify";
 
 export const useExam = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -20,6 +26,17 @@ export const useExam = () => {
     );
   };
 
+  const createExam = async (exam: CreateExamRequest) => {
+    const response = await dispatch(
+      Api.endpoints["createExam"].initiate({ createExamRequest: exam })
+    ).unwrap();
+
+    if (response) {
+      dispatch(appendEntity(response));
+      toast("Created exam", { type: "success" });
+    }
+  };
+
   const loadExamLocations = async (userId: string) => {
     const { data } = await dispatch(
       Api.endpoints["loadLocationsUser"].initiate({ id: userId })
@@ -29,5 +46,5 @@ export const useExam = () => {
     dispatch(loadLocations(response));
   };
 
-  return { loadExams, loadExamLocations };
+  return { loadExams, loadExamLocations, createExam };
 };

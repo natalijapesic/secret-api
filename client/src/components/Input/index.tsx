@@ -5,6 +5,7 @@ import styles from "./styles.module.css";
 interface InputProps {
   icon?: React.ReactNode;
   variant?: "placeholder" | "border";
+  type: "text" | "number" | "date" | "password";
 }
 
 export const Input = React.forwardRef<
@@ -23,7 +24,6 @@ export const Input = React.forwardRef<
         },
         props.className
       )}
-      type="text"
     />
   );
 });

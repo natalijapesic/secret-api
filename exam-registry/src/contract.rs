@@ -44,15 +44,26 @@ pub fn execute(
         ExecuteMsg::StartExam { exam_id, auth } => {
             try_start_exam(deps, env.block.time, info, exam_id, auth)
         }
-        ExecuteMsg::ChangeTime { exam_id, time } => {
-            try_change_time(deps, env.block.time, info, exam_id, time)
-        }
+        ExecuteMsg::ChangeTime { exam_id, time } => try_change_time(
+            deps,
+            env.block.time,
+            info,
+            exam_id,
+            Timestamp::from_seconds(time),
+        ),
         ExecuteMsg::SaveExam {
             course_name,
             start_time,
             orgs,
             ipfs,
-        } => try_save_exam(deps, info, course_name, start_time, orgs, ipfs),
+        } => try_save_exam(
+            deps,
+            info,
+            course_name,
+            Timestamp::from_seconds(start_time),
+            orgs,
+            ipfs,
+        ),
         ExecuteMsg::ValidateExam { exam_id } => try_validate_exam(deps, info, exam_id),
     }
 }
@@ -74,7 +85,7 @@ fn query_exam(deps: Deps, exam_id: u64) -> StdResult<ExamResponse> {
     Ok(ExamResponse {
         exam_id: exam.id,
         ipfs: exam.ipfs,
-        exam_time: exam.start_time,
+        exam_time: exam.start_time.seconds(),
     })
 }
 
@@ -96,7 +107,7 @@ pub fn try_change_time(
 ) -> Result<Response, StdError> {
     validate_parlament(&deps, info.sender)?;
 
-    if current_time.gt(&Timestamp::from_seconds(time.nanos())) {
+    if current_time.gt(&time) {
         return Err(StdError::generic_err("Invalid time"));
     }
 
@@ -117,14 +128,17 @@ pub fn try_start_exam(
         return Err(StdError::generic_err("Not a valid org."));
     }
 
-    // if exam.start_time.lt(&current_time.plus_seconds(1)) || exam.start_time.plus_seconds(600).lt(&current_time.plus_seconds(1)) {
-    //     return Err(StdError::generic_err("Invalid time. "));
-    // }
+    if !current_time.lt(&exam.start_time.minus_seconds(900)) && exam.start_time.gt(&current_time) {
+        return Err(StdError::generic_err(format!(
+            "You can only start the exam 15 minutes before the start time. Start time is: {}",
+            exam.start_time.seconds()
+        )));
+    }
 
     Ok(Response::new().set_data(to_binary(&ExamResponse {
         exam_id,
         ipfs: exam.ipfs,
-        exam_time: exam.start_time,
+        exam_time: exam.start_time.seconds(),
     })?))
 }
 

@@ -9,8 +9,8 @@ import {
 const chainId = "secretdev-1";
 const url = "http://localhost:1317";
 const contractHash =
-  "394b7706d51c83f84ee275cb175cb3c8fc3c2f83e00350cc30f33953dba6b7ae";
-const contractAddress = "secret1ulgw0td86nvs4wtpsc80thv6xelk76ut6us57w";
+  "79677fab67a4dd007d98cf3f7af90a20e7d8b24cee49c344d22204590f12e3e1";
+const contractAddress = "secret1l425neayde0fzfcv3apkyk4zqagvflm6u6e56s";
 
 class SecretJsService {
   async initializeClient() {

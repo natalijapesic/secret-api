@@ -1,4 +1,4 @@
-use cosmwasm_std::{Addr, Timestamp};
+use cosmwasm_std::Addr;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
@@ -17,7 +17,7 @@ pub struct InstantiateMsg {
 pub enum ExecuteMsg {
     ChangeTime {
         exam_id: u64,
-        time: Timestamp,
+        time: u64,
     },
     StartExam {
         exam_id: u64,
@@ -25,7 +25,7 @@ pub enum ExecuteMsg {
     },
     SaveExam {
         course_name: String,
-        start_time: Timestamp,
+        start_time: u64,
         orgs: MerkleTreeInfo,
         ipfs: IpfsInfo,
     },
@@ -44,5 +44,5 @@ pub enum QueryMsg {
 pub struct ExamResponse {
     pub exam_id: u64,
     pub ipfs: IpfsInfo,
-    pub exam_time: Timestamp,
+    pub exam_time: u64,
 }

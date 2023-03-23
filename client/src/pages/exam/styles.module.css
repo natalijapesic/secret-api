@@ -1,20 +1,62 @@
-.container {
-  display: grid;
-  grid-template-columns: 10% 80% 10%;
-  padding-top: var(--size-24);
-  align-items: center;
-}
-
-.container-item {
+.page-layout {
   display: flex;
   flex-direction: column;
-  grid-column-start: 2;
-  grid-column-end: 3;
+  align-items: center;
+  flex: 1;
+  overflow: hidden;
+}
+
+.form-container {
+  flex: 1;
+  display: flex;
   gap: var(--size-8);
+  overflow: hidden;
+  flex-direction: column;
+  padding: var(--size-5);
+}
+
+.form {
+  flex: 1;
+  overflow: auto;
+  padding: var(--size-2);
+}
+
+.general-inputs {
+  display: flex;
+  gap: var(--size-2);
+}
+
+.location-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--size-4);
+}
+
+.location-entries {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-6);
+}
+
+.add-button {
+  width: 100%;
+}
+
+.location-inputs {
+  display: flex;
+  align-items: center;
+  gap: var(--size-4);
 }
 
 .heading {
   color: var(--color-black);
   font-weight: var(--font-weight-bold);
   font-size: var(--font-3xl);
+}
+
+.subheading {
+  font-size: var(--font-2xl);
+  text-align: left;
+  width: 100%;
 }

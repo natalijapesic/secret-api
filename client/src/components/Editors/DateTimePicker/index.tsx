@@ -2,14 +2,14 @@ import { EditorProps } from "@/components/Editors/types";
 import { Input } from "@/components/Input";
 import { useFormContext } from "react-hook-form";
 
-export function NumberEditor({ field, property }: EditorProps) {
+export function DateEditor({ field, property }: EditorProps) {
   const { register } = useFormContext();
 
   return (
     <Input
       {...register(property)}
       {...field}
-      type="number"
+      type="date"
       variant="placeholder"
       placeholder={property}
     />

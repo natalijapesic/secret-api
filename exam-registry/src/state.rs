@@ -52,7 +52,7 @@ pub fn add_exam(storage: &mut dyn Storage, request: RequestExam) -> StdResult<Ex
     Ok(ExamResponse {
         exam_id: counter,
         ipfs: exam.ipfs,
-        exam_time: exam.start_time,
+        exam_time: exam.start_time.seconds(),
     })
 }
 pub fn valid_exam(storage: &mut dyn Storage, exam_id: u64) -> StdResult<()> {
@@ -87,7 +87,7 @@ pub fn update_exam(
     Ok(ExamResponse {
         exam_id,
         ipfs: exam.ipfs,
-        exam_time: exam.start_time,
+        exam_time: exam.start_time.seconds(),
     })
 }
 pub fn load_exam(storage: &dyn Storage, exam_id: u64) -> StdResult<Exam> {

@@ -1,0 +1,31 @@
+.list-container {
+  display: grid;
+  grid-template-columns: 35% 30% 35%;
+  grid-template-rows: 10% 40% 30%;
+  height: var(--size-full);
+  padding-top: var(--size-8);
+}
+
+.list-item {
+  display: flex;
+  flex-direction: column;
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 2;
+  gap: var(--size-4);
+  grid-row-end: 3;
+}
+
+.form-title {
+  color: var(--color-red-500);
+  font-size: var(--font-2xl);
+  font-weight: var(--font-weight-bold);
+  padding-bottom: var(--size-4);
+}
+
+.form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--size-4);
+  width: var(--size-full);
+}
