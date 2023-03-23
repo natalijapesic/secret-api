@@ -2,6 +2,7 @@
   display: flex;
   align-items: center;
   width: var(--size-full);
+  box-shadow: var(--shadow-md);
   justify-content: space-between;
   background-color: var(--color-white);
   padding: var(--size-4) var(--size-8) var(--size-4);

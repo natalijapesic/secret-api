@@ -214,7 +214,6 @@ export type Exam = {
   name: string;
   time: number;
   contractId?: string;
-  course: string;
   isReady: boolean;
   users: object;
   locations: object;
@@ -225,7 +224,6 @@ export type LocationInfo = {
   number: string;
   city: string;
   time: number;
-  municipality?: string;
   classroom: string;
   users: object;
   exam: Exam;
@@ -246,11 +244,12 @@ export type UpdateLocation = {
 export type CreateExamRequest = {
   name: string;
   time: number;
-  course: string;
+  locations: LocationInfo[];
 };
 export type UpdateExamRequest = {
   isReady: boolean;
   contractId: string;
+  locations: LocationInfo[];
 };
 export type UploadQuestionsResponse = {
   ipfsInfo: object;
@@ -258,7 +257,9 @@ export type UploadQuestionsResponse = {
 };
 export type Question = {
   text: string;
-  options: string[];
+  options: {
+    E?: string;
+  };
   answer: string;
 };
 export type UploadQuestionsRequest = {

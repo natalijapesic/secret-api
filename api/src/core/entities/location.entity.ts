@@ -28,9 +28,6 @@ export class LocationInfo extends BaseEntity<LocationInfo, 'id'> {
   time: number;
 
   @Property({ nullable: true })
-  municipality?: string;
-
-  @Property({ nullable: true })
   classroom: string;
 
   @ManyToMany(() => User, (user) => user.locations, { hidden: true })

@@ -27,9 +27,6 @@ export class Exam extends BaseEntity<Exam, 'id'> {
   contractId?: string;
 
   @Property()
-  course: string;
-
-  @Property()
   isReady: boolean = false;
 
   @ManyToMany(() => User)
