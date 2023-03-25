@@ -8,9 +8,6 @@ export const Header = () => {
         SecretExam
       </Link>
       <nav className={styles["header-container__nav"]}>
-        {/* <Link className={styles.nav__link} href="/create">
-          Create Exam
-        </Link> */}
       </nav>
     </header>
   );

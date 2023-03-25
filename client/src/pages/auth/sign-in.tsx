@@ -1,6 +1,7 @@
 import StaticForm from "@/components/StaticForm";
 import { signValues } from "@/components/StaticForm/static/auth";
 import { useAuth } from "@/hooks/useAuth";
+import { useRouter } from "next/router";
 
 export default function SignIn() {
   const { signIn } = useAuth();

@@ -1,9 +1,8 @@
 import Button from "@/components/Button";
 import { Input } from "@/components/Input";
-import StaticForm from "@/components/StaticForm";
 import { CreateExam } from "@/components/StaticForm/static/create-exam";
 import { useExam } from "@/hooks/useExam";
-import { CreateExamRequest, CreateLocation } from "@/store/api/endpoints";
+import { CreateExamRequest } from "@/store/api/endpoints";
 import styles from "./styles.module.css";
 import { useFieldArray, useForm } from "react-hook-form";
 

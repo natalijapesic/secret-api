@@ -4,7 +4,6 @@ import {
   UploadQuestionsRequest,
   UploadQuestionsResponse,
 } from "@/store/api/endpoints";
-import axios from "@/types/axiosSetUp";
 import secretjsService from "@/services/secretjs.service";
 import { Ipfs, SaveExam } from "@/services/types";
 import { generateInfo, generateTree } from "@/services/merkleTree";

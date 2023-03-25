@@ -7,16 +7,21 @@ import {
 } from "@/store/api/endpoints";
 import { loadUser } from "@/store/user";
 import { Role } from "@/store/user/types";
+import { useRouter } from "next/router";
 
 export const useAuth = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
 
   const signIn = async (data: SignUser) => {
     const response = await dispatch(
       Api.endpoints["signInAuth"].initiate({ signUser: data })
     ).unwrap();
 
-    dispatch(loadUser(response));
+    if (response) {
+      dispatch(loadUser(response));
+      router.push(`/`);
+    }
   };
 
   const signUp = async (data: RegisterUser) => {
@@ -27,7 +32,10 @@ export const useAuth = () => {
       })
     ).unwrap();
 
-    dispatch(loadUser(response));
+    if (response) {
+      dispatch(loadUser(response));
+      router.push(`/`);
+    }
   };
 
   return { signIn, signUp };

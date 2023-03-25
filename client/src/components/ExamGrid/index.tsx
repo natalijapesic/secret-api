@@ -7,6 +7,7 @@ import { ChangeEvent, useMemo, useState } from "react";
 import styles from "./styles.module.css";
 import { FilterMatchMode } from "primereact/api";
 import { MdCreateNewFolder, MdOutlineMoreTime } from "react-icons/md";
+import { useRouter } from "next/router";
 
 interface ExamGrid {
   id: string;
@@ -15,7 +16,7 @@ interface ExamGrid {
 }
 const ExamGrid = () => {
   const [globalFilterValue, setGlobalFilterValue] = useState("");
-
+  const router = useRouter();
   const exams = useSelector((state: RootState) => selectExamsData(state));
   const [filters, setFilters] = useState({
     global: { value: "", matchMode: FilterMatchMode.CONTAINS },
@@ -46,7 +47,7 @@ const ExamGrid = () => {
   };
 
   const createQuestionsFor = (examId: string) => {
-    console.log(examId);
+    router.push(`/questions/${examId}`);
   };
 
   const actionsBodyTemplate = (rowData: ExamGrid) => {

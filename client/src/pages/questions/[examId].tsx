@@ -1,7 +1,10 @@
 import Button from "@/components/Button";
 import { Input } from "@/components/Input";
+import { RootState } from "@/store";
+import { selectExamById } from "@/store/exam";
 import { useRouter } from "next/router";
-import { useFieldArray, useForm, useController } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
 import styles from "./styles.module.css";
 
 type CreateQuestion = {
@@ -13,6 +16,10 @@ type CreateQuestion = {
 export default function CreateQuestions() {
   const router = useRouter();
   const { examId } = router.query;
+
+  if (!examId || Array.isArray(examId)) throw new Error("Error should has id");
+
+  const exam = useSelector((state: RootState) => selectExamById(state, examId));
 
   const { register, control, handleSubmit } = useForm<{
     questions: CreateQuestion[];
@@ -41,7 +48,7 @@ export default function CreateQuestions() {
     <section className={styles.container}>
       <header>
         <h1 className={styles.heading}>Add Questions</h1>
-        <span>{examId}</span>
+        <span>{exam?.name}</span>
       </header>
       <form
         onSubmit={handleSubmit(onSubmit)}
