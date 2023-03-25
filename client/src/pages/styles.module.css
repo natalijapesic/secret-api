@@ -1,0 +1,18 @@
+.heading {
+  font-size: var(--font-3xl);
+  font-weight: var(--font-weight-bold);
+  margin: var(--size-4) 0;
+}
+
+.browser-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.container {
+  display: flex;
+  width: var(--container-xl);
+  flex-direction: column;
+  margin: 0 auto;
+}
