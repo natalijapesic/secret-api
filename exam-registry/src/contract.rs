@@ -1,5 +1,5 @@
 use crate::{
-    exam::{self, RequestExam},
+    exam::RequestExam,
     ipfs::IpfsInfo,
     merkle_tree::{MerkleAuth, MerkleTreeInfo},
     msg::{ExamResponse, ExecuteMsg, InstantiateMsg, QueryMsg},

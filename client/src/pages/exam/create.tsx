@@ -3,7 +3,7 @@ import { Input } from "@/components/Input";
 import StaticForm from "@/components/StaticForm";
 import { CreateExam } from "@/components/StaticForm/static/create-exam";
 import { useExam } from "@/hooks/useExam";
-import { CreateExamRequest } from "@/store/api/endpoints";
+import { CreateExamRequest, CreateLocation } from "@/store/api/endpoints";
 import styles from "./styles.module.css";
 import { useFieldArray, useForm } from "react-hook-form";
 
@@ -28,30 +28,21 @@ export default function ExamForm() {
     control,
   });
 
-  const onSubmitExam = (data: CreateExam) => {
+  const onSubmit = (data: CreateExam) => {
+    const time = new Date(data.time).getTime() / 1000;
+    const locations = data.locations.map((location) => {
+      return {
+        ...location,
+        time,
+      };
+    });
     const request: CreateExamRequest = {
       name: data.name,
-      time: new Date(data.time).getTime() / 1000,
-      locations: [],
+      time,
+      locations,
     };
 
     createExam(request);
-  };
-
-  const onSubmit = ({ locations, name, time }: CreateExam) => {
-    const startTime = new Date(time).getTime() / 1000;
-
-    // createExam({
-    //   name,
-    //   time: startTime,
-    //   locations: locations.map((location) => {
-    //     return {
-    //       ...location,
-    //       time: startTime,
-    //       users: [],
-    //     };
-    //   }),
-    // });
   };
 
   return (

@@ -2,7 +2,6 @@ import { AppDispatch } from "@/store";
 import { useDispatch } from "react-redux";
 import {
   CreateExamRequest,
-  Exam,
   LocationInfo,
   SecretApi as Api,
 } from "@/store/api/endpoints";
@@ -26,9 +25,9 @@ export const useExam = () => {
     );
   };
 
-  const createExam = async (exam: CreateExamRequest) => {
+  const createExam = async (reqeust: CreateExamRequest) => {
     const response = await dispatch(
-      Api.endpoints["createExam"].initiate({ createExamRequest: exam })
+      Api.endpoints["createExam"].initiate({ createExamRequest: reqeust })
     ).unwrap();
 
     if (response) {

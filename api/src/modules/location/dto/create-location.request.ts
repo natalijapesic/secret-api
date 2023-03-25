@@ -5,11 +5,7 @@ export class CreateLocation {
 
   city: string;
 
-  municipality?: string;
-
   time: number;
 
   classroom: string;
-
-  examId: string;
 }

@@ -232,10 +232,8 @@ export type CreateLocation = {
   street: string;
   number: string;
   city: string;
-  municipality?: string;
   time: number;
   classroom: string;
-  examId: string;
 };
 export type UpdateLocation = {
   userIds?: string[];
@@ -244,7 +242,7 @@ export type UpdateLocation = {
 export type CreateExamRequest = {
   name: string;
   time: number;
-  locations: LocationInfo[];
+  locations: CreateLocation[];
 };
 export type UpdateExamRequest = {
   isReady: boolean;
@@ -257,9 +255,7 @@ export type UploadQuestionsResponse = {
 };
 export type Question = {
   text: string;
-  options: {
-    E?: string;
-  };
+  options: string[];
   answer: string;
 };
 export type UploadQuestionsRequest = {

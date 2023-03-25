@@ -1,5 +1,5 @@
 export class Question {
   text: string;
-  options: {['E']: "Ne znam"};
+  options: string[];
   answer: string;
 }

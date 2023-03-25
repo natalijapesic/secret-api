@@ -34,15 +34,7 @@ export class LocationService {
   }
 
   async create(request: CreateLocation) {
-    const exam = await this.examRepository.findOne(request.examId);
-    Logger.log(exam.time);
-    if (exam.time !== request.time)
-      throw new BadRequestException('Time must be same');
-
-    const location = this.locationRepository.create({
-      ...request,
-      exam: request.examId,
-    });
+    const location = this.locationRepository.create(request);
 
     await this.locationRepository.persistAndFlush(location);
 

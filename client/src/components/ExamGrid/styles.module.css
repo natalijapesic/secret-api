@@ -24,3 +24,9 @@
   border: none;
   padding: 0;
 }
+
+
+.action-icons{
+  display: flex;
+  gap: var(--size-6)
+}

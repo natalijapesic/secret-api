@@ -17,6 +17,7 @@ export interface User {
   id: string | null;
   role: Role;
   username: string | null;
+  jmbg: string | null;
 }
 
 export interface UserState {
