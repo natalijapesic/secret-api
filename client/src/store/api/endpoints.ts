@@ -256,7 +256,7 @@ export type UploadQuestionsResponse = {
 export type Question = {
   text: string;
   options: string[];
-  answer: string;
+  answer: number;
 };
 export type UploadQuestionsRequest = {
   questions: Question[];

@@ -1,6 +1,6 @@
 export interface ExamResponse {
   exam_id: number;
-  exam_time: string;
+  exam_time: number;
   ipfs: Ipfs;
 };
 
@@ -30,7 +30,7 @@ export const merkleData: MerkleData = {
 
 export interface SaveExam {
   course_name: string;
-  start_time: string;
+  start_time: number;
   orgs: MerkleTreeInfo;
   ipfs: Ipfs;
 };

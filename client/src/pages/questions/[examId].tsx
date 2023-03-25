@@ -1,28 +1,25 @@
 import Button from "@/components/Button";
 import { Input } from "@/components/Input";
+import { useExam } from "@/hooks/useExam";
 import { RootState } from "@/store";
+import { Question } from "@/store/api/endpoints";
 import { selectExamById } from "@/store/exam";
 import { useRouter } from "next/router";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import styles from "./styles.module.css";
 
-type CreateQuestion = {
-  text: string;
-  options: string[];
-  answer: number;
-};
-
 export default function CreateQuestions() {
   const router = useRouter();
   const { examId } = router.query;
+  const { uploadExam } = useExam();
 
   if (!examId || Array.isArray(examId)) throw new Error("Error should has id");
 
   const exam = useSelector((state: RootState) => selectExamById(state, examId));
 
   const { register, control, handleSubmit } = useForm<{
-    questions: CreateQuestion[];
+    questions: Question[];
   }>({
     defaultValues: {
       questions: [
@@ -40,8 +37,10 @@ export default function CreateQuestions() {
     control,
   });
 
-  const onSubmit = (data: { questions: CreateQuestion[] }) => {
-    console.log(data);
+  const onSubmit = async (data: { questions: Question[] }) => {
+    if (!exam) throw new Error(`Exam with id ${examId} does not exist`);
+
+    uploadExam(data.questions, exam);
   };
 
   return (
