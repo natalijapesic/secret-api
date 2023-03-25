@@ -1,8 +1,8 @@
 import { RegisterUser, SignUser } from "@/store/api/endpoints";
 
 export const signValues: SignUser = {
-  password: "",
   username: "",
+  password: "",
 };
 
 export const registerValues: Partial<RegisterUser> = {
