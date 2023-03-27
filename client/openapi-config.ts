@@ -7,7 +7,7 @@ const config: ConfigFile = {
   outputFile: "./src/store/api/endpoints.ts",
   exportName: "SecretApi",
   hooks: true,
-  
+  tag: true,
 };
 
 export default config;

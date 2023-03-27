@@ -47,6 +47,7 @@ export const useExam = () => {
     if (response) {
       dispatch(appendEntity(response));
       toast("Created exam", { type: "success" });
+      router.push(`/`);
     }
   };
 

@@ -41,7 +41,7 @@ const ExamGrid = () => {
         time: exam.time,
       };
     });
-  }, [exams]);
+  }, [exams.length]);
 
   const dateBodyTemplate = (rowData: ExamGrid) => {
     return new Date(rowData.time * 1000).toLocaleString();

@@ -13,7 +13,6 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
       <ClientProvider>
-        <Header></Header>
         <Component {...pageProps} />
       </ClientProvider>
     </Provider>

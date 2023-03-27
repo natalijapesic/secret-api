@@ -1,4 +1,5 @@
 import Button from "@/components/Button";
+import { Header } from "@/components/header";
 import { Input } from "@/components/Input";
 import { useExam } from "@/hooks/useExam";
 import { RootState } from "@/store";
@@ -44,76 +45,81 @@ export default function CreateQuestions() {
   };
 
   return (
-    <section className={styles.container}>
-      <header>
-        <h1 className={styles.heading}>Add Questions</h1>
-        <span>{exam?.name}</span>
-      </header>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className={styles["form-container"]}
-      >
-        <div className={styles["form-contents"]}>
-          <div>
-            {fields.map((f, index) => {
-              return (
-                <div
-                  key={`question-${index}`}
-                  className={styles["question-container"]}
-                >
-                  <h4 className={styles["question-indicator"]}>#{index + 1}</h4>
-                  <Input
-                    placeholder="Question Body"
-                    type="text"
-                    {...register(`questions.${index}.text`)}
-                  />
-                  <div className={styles["answer-layout"]}>
-                    {Array.from({ length: 4 }).map((_, answerIndex) => {
-                      return (
-                        <div
-                          key={`question-a-${answerIndex}`}
-                          className={styles["answer-inputs"]}
-                        >
-                          <Input
-                            placeholder={`Answer ${answerIndex + 1}`}
-                            type="text"
-                            {...register(
-                              `questions.${index}.options.${answerIndex}`
-                            )}
-                          />
-                          <input
-                            type="radio"
-                            {...register(`questions.${index}.answer`)}
-                            value={answerIndex}
-                            id={f.id}
-                          />
-                        </div>
-                      );
-                    })}
+    <>
+      <Header></Header>
+      <section className={styles.container}>
+        <header>
+          <h1 className={styles.heading}>Add Questions</h1>
+          <span>{exam?.name}</span>
+        </header>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className={styles["form-container"]}
+        >
+          <div className={styles["form-contents"]}>
+            <div>
+              {fields.map((f, index) => {
+                return (
+                  <div
+                    key={`question-${index}`}
+                    className={styles["question-container"]}
+                  >
+                    <h4 className={styles["question-indicator"]}>
+                      #{index + 1}
+                    </h4>
+                    <Input
+                      placeholder="Question Body"
+                      type="text"
+                      {...register(`questions.${index}.text`)}
+                    />
+                    <div className={styles["answer-layout"]}>
+                      {Array.from({ length: 4 }).map((_, answerIndex) => {
+                        return (
+                          <div
+                            key={`question-a-${answerIndex}`}
+                            className={styles["answer-inputs"]}
+                          >
+                            <Input
+                              placeholder={`Answer ${answerIndex + 1}`}
+                              type="text"
+                              {...register(
+                                `questions.${index}.options.${answerIndex}`
+                              )}
+                            />
+                            <input
+                              type="radio"
+                              {...register(`questions.${index}.answer`)}
+                              value={answerIndex}
+                              id={f.id}
+                            />
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
+            <Button
+              variant="secondary"
+              type="button"
+              className={styles["add-button"]}
+              onClick={() =>
+                append({
+                  answer: 0,
+                  options: [],
+                  text: "",
+                })
+              }
+            >
+              Add Question
+            </Button>
           </div>
-          <Button
-            variant="secondary"
-            type="button"
-            className={styles["add-button"]}
-            onClick={() =>
-              append({
-                answer: 0,
-                options: [],
-                text: "",
-              })
-            }
-          >
-            Add Question
+          <Button variant="primary" type="submit">
+            Finalize
           </Button>
-        </div>
-        <Button variant="primary" type="submit">
-          Finalize
-        </Button>
-      </form>
-    </section>
+        </form>
+      </section>
+    </>
   );
 }
