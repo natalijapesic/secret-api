@@ -11,6 +11,7 @@ const Exam = () => {
   const { loadExams } = useExam();
 
   useEffect(() => {
+    console.log("dlskfdslkjf");
     loadExams();
   }, []);
 
