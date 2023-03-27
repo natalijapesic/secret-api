@@ -1,4 +1,4 @@
-import { ExamResponse, SaveExam } from "@/services/types";
+import { ExamResponse, SaveExam, StartExam } from "@/services/types";
 import {
   fromUtf8,
   MsgExecuteContractResponse,
@@ -9,8 +9,8 @@ import {
 const chainId = "secretdev-1";
 const url = "http://localhost:1317";
 const contractHash =
-  "79677fab67a4dd007d98cf3f7af90a20e7d8b24cee49c344d22204590f12e3e1";
-const contractAddress = "secret1l425neayde0fzfcv3apkyk4zqagvflm6u6e56s";
+  "38885b4e2f30d0b9e2e1db348232ad3ef1047e21f1b14f08c3a8cbba9a0dafec";
+const contractAddress = "secret1nh6eel87mzg7prdlctm458yxexk7ce3jap82fa";
 
 class SecretJsService {
   async initializeClient() {
@@ -65,11 +65,6 @@ class SecretJsService {
         coinGeckoId: "secret",
       },
       coinType: 529,
-      // gasPriceStep: {
-      //   low: 0.1,
-      //   average: 0.25,
-      //   high: 1,
-      // },
       features: ["secretwasm", "stargate", "ibc-transfer", "ibc-go"],
     });
     await window.keplr.enable(chainId);
@@ -114,6 +109,40 @@ class SecretJsService {
     );
     console.log("Exam tx response", parsedTransactionData);
 
+    return JSON.parse(
+      fromUtf8(MsgExecuteContractResponse.decode(tx.data[0]).data)
+    ) as ExamResponse;
+  }
+
+  async startExamTx(
+    request: StartExam,
+    client: SecretNetworkClient
+  ): Promise<ExamResponse> {
+    const tx: TxResponse = await client.tx.compute.executeContract(
+      {
+        sender: client.address,
+        contract_address: contractAddress,
+        code_hash: contractHash,
+        msg: {
+          start_exam: request,
+        },
+        sent_funds: [],
+      },
+      {
+        gasLimit: 200000,
+      }
+    );
+
+    if (tx.code !== 0) throw Error(tx.rawLog);
+
+    const parsedTransactionData = fromUtf8(
+      MsgExecuteContractResponse.decode(tx.data[0]).data
+    );
+    console.log("Exam tx response", parsedTransactionData);
+
+    console.log(
+      JSON.parse(fromUtf8(MsgExecuteContractResponse.decode(tx.data[0]).data))
+    );
     return JSON.parse(
       fromUtf8(MsgExecuteContractResponse.decode(tx.data[0]).data)
     ) as ExamResponse;

@@ -11,6 +11,7 @@ export const userSlice = createSlice({
       state.instance.id = action.payload.user.id;
       state.instance.role = action.payload.user.role as Role;
       state.instance.username = action.payload.user.username;
+      state.instance.jmbg = action.payload.user.jmbg;
       state.token = action.payload.token;
     },
     loadLocations: (state, action: PayloadAction<LocationInfo[]>) => {

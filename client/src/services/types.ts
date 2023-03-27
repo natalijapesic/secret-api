@@ -2,9 +2,13 @@ export interface ExamResponse {
   exam_id: number;
   exam_time: number;
   ipfs: Ipfs;
-};
+}
 
-export interface Ipfs{ path: string; secret: string; iv: string };
+export interface Ipfs {
+  path: string;
+  secret: string;
+  iv: string;
+}
 
 export type MerkleData = {
   root: number[];
@@ -14,7 +18,7 @@ export type MerkleData = {
 
 export interface MerkleAuth {
   proof: number[][];
-  index: number;
+  index: string;
 }
 
 export interface MerkleTreeInfo {
@@ -33,4 +37,9 @@ export interface SaveExam {
   start_time: number;
   orgs: MerkleTreeInfo;
   ipfs: Ipfs;
-};
+}
+
+export interface StartExam {
+  exam_id: number;
+  auth: MerkleAuth;
+}

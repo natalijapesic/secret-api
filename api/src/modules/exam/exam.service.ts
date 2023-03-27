@@ -9,7 +9,9 @@ import {
 } from '@nestjs/common';
 import { Exam, Role, User } from 'core/entities';
 import { IPFSService } from 'core/services/ipfs.service';
+import { IPFSInfo } from 'core/types/ipfs.dto';
 import { CreateExamRequest } from 'modules/exam/dto/create-exam.request';
+import { DownloadQuestionsResponse } from 'modules/exam/dto/download-question.response';
 import { UpdateExamRequest } from 'modules/exam/dto/update-exam.request';
 import { UploadQuestionsRequest } from 'modules/exam/dto/upload-questions.request';
 import { UploadQuestionsResponse } from 'modules/exam/dto/upload-questions.response';
@@ -86,14 +88,9 @@ export class ExamService {
       },
     );
 
-    Logger.log('exam', exam);
-
     if (!exam) throw new BadRequestException('Exam is not ready for upload');
-    Logger.log(payload.questions);
 
     const ipfsInfo = await this.ipfsService.upload(payload.questions);
-
-    Logger.log(ipfsInfo);
 
     const organizationAddresses = exam.users
       .getItems()
@@ -102,7 +99,35 @@ export class ExamService {
     return { ipfsInfo, organizationAddresses };
   }
 
-  async assignContract(id: string, contractId: string) {
+  async download(ipfs: IPFSInfo): Promise<DownloadQuestionsResponse> {
+    const questions = await this.ipfsService.downlaod(ipfs);
+
+    return { questions };
+  }
+
+  async organizationBy(examId: string) {
+    const exam = await this.examRepository.findOne(
+      {
+        id: { $eq: examId },
+        isReady: { $eq: true },
+      },
+      {
+        strategy: LoadStrategy.SELECT_IN,
+        populate: ['users'],
+        populateWhere: { users: { role: { $eq: Role.Organization } } },
+      },
+    );
+
+    if (!exam) throw new BadRequestException('Exam is not ready for upload');
+
+    const organizationAddresses = exam.users
+      .getItems()
+      .map((organization) => organization.walletAddress);
+
+    return organizationAddresses;
+  }
+
+  async assignContract(id: string, contractId: number) {
     const exam = await this.examRepository.findOne(id);
 
     exam.contractId = contractId;

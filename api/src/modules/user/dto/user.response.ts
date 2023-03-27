@@ -14,4 +14,6 @@ export class UserResponse {
 
   @Length(4, 10)
   public username: string;
+
+  public jmbg: string;
 }

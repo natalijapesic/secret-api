@@ -29,7 +29,7 @@ export class AuthService {
       role: user.role,
     };
 
-    const { password, jmbg, ...response } = user;
+    const { password, ...response } = user;
 
     return {
       user: response,
@@ -42,7 +42,7 @@ export class AuthService {
   ): Promise<UserResponse> {
     const user: User = await this.usersService.findOne(username);
     if (await verify(user.password, password)) {
-      const { password, jmbg, ...response } = user;
+      const { password, ...response } = user;
       return response;
     }
 

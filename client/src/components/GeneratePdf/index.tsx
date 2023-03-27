@@ -2,6 +2,7 @@ import GenerateQRCode from "@/components/QR";
 import { Exam, Question } from "@/store/api/endpoints";
 import { selectUser } from "@/store/user";
 import { INFO, WARNING } from "@/types/constants";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import styles from "./styles.module.css";
 

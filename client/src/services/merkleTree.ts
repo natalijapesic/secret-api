@@ -22,7 +22,7 @@ export const generateInfo = (
 export const generateAuth = (
   tree: MerkleTree,
   address: string,
-  index: number
+  index: string
 ): MerkleAuth => {
   const proof = tree.getProof(SHA256(address) as any).map((p) => p.data);
   const binProof = proof.map((single) => single.toJSON().data);

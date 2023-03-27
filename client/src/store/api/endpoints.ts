@@ -104,6 +104,13 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.uploadQuestionsRequest,
       }),
     }),
+    downloadExam: build.mutation<DownloadExamApiResponse, DownloadExamApiArg>({
+      query: (queryArg) => ({
+        url: `/exam/download`,
+        method: "POST",
+        body: queryArg.downloadRequest,
+      }),
+    }),
     updateRelationExam: build.mutation<
       UpdateRelationExamApiResponse,
       UpdateRelationExamApiArg
@@ -113,6 +120,12 @@ const injectedRtkApi = api.injectEndpoints({
         method: "PATCH",
         body: queryArg.updateUserRelation,
       }),
+    }),
+    organizationByExam: build.query<
+      OrganizationByExamApiResponse,
+      OrganizationByExamApiArg
+    >({
+      query: (queryArg) => ({ url: `/exam/${queryArg.id}/organizations` }),
     }),
   }),
   overrideExisting: false,
@@ -180,10 +193,19 @@ export type UploadExamApiResponse = /** status 201  */ UploadQuestionsResponse;
 export type UploadExamApiArg = {
   uploadQuestionsRequest: UploadQuestionsRequest;
 };
+export type DownloadExamApiResponse =
+  /** status 201  */ DownloadQuestionsResponse;
+export type DownloadExamApiArg = {
+  downloadRequest: DownloadRequest;
+};
 export type UpdateRelationExamApiResponse = /** status 200  */ Exam;
 export type UpdateRelationExamApiArg = {
   id: string;
   updateUserRelation: UpdateUserRelation;
+};
+export type OrganizationByExamApiResponse = /** status 200  */ string[];
+export type OrganizationByExamApiArg = {
+  id: string;
 };
 export type UserResponse = {
   role: "admin" | "parlament" | "profesor" | "student" | "organization";
@@ -191,6 +213,7 @@ export type UserResponse = {
   email: string;
   walletAddress?: string;
   username: string;
+  jmbg: string;
 };
 export type AuthResponse = {
   token: string;
@@ -213,7 +236,7 @@ export type Exam = {
   id: string;
   name: string;
   time: number;
-  contractId?: string;
+  contractId?: number;
   isReady: boolean;
   users: object;
   locations: object;
@@ -245,9 +268,9 @@ export type CreateExamRequest = {
   locations: CreateLocation[];
 };
 export type UpdateExamRequest = {
-  isReady: boolean;
-  contractId: string;
-  locations: LocationInfo[];
+  isReady?: boolean;
+  contractId?: number;
+  locations?: LocationInfo[];
 };
 export type UploadQuestionsResponse = {
   ipfsInfo: object;
@@ -262,6 +285,12 @@ export type UploadQuestionsRequest = {
   questions: Question[];
   walletAddres: string;
   examId: string;
+};
+export type DownloadQuestionsResponse = {
+  questions: Question[];
+};
+export type DownloadRequest = {
+  ipfsInfo: object;
 };
 export type UpdateUserRelation = {
   userIds: string[];
@@ -284,5 +313,7 @@ export const {
   useUpdateExamMutation,
   useRemoveExamMutation,
   useUploadExamMutation,
+  useDownloadExamMutation,
   useUpdateRelationExamMutation,
+  useOrganizationByExamQuery,
 } = injectedRtkApi;

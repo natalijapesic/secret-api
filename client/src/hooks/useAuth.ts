@@ -8,9 +8,12 @@ import {
 import { loadUser } from "@/store/user";
 import { Role } from "@/store/user/types";
 import { useRouter } from "next/router";
+import { useContext } from "react";
+import { ClientContext } from "@/types/clientContext";
 
 export const useAuth = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const { client } = useContext(ClientContext);
   const router = useRouter();
 
   const signIn = async (data: SignUser) => {
@@ -25,10 +28,15 @@ export const useAuth = () => {
   };
 
   const signUp = async (data: RegisterUser) => {
-    //TODO: wallet addres by extension
+    if (!client) throw new Error("Client must be signed");
+
     const response = await dispatch(
       Api.endpoints["signUpAuth"].initiate({
-        registerUser: { ...data, walletAddress: "uknown", role: Role.Student },
+        registerUser: {
+          ...data,
+          walletAddress: client.address,
+          role: Role.Student,
+        },
       })
     ).unwrap();
 

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
 import { IPFSInfo } from 'core/types/ipfs.dto';
+import { Question } from 'core/types/question.request';
 
 @Injectable()
 export class IPFSService {
@@ -13,9 +14,13 @@ export class IPFSService {
     return data;
   }
 
-  async downlaod(content: IPFSInfo): Promise<object> {
-    return await (
+  async downlaod(content: IPFSInfo): Promise<Question[]> {
+    const data = await (
       await axios.post(`${this.BASE_URL}/decrypt`, content)
     ).data;
+
+    console.log(data);
+
+    return data;
   }
 }

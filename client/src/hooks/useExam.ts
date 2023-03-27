@@ -6,20 +6,25 @@ import {
   LocationInfo,
   Question,
   SecretApi as Api,
-  UploadQuestionsRequest,
 } from "@/store/api/endpoints";
-import { appendEntity, loadData } from "@/store/exam";
+import { appendEntity, loadData, updateEntity } from "@/store/exam";
 import { loadLocations } from "@/store/user";
 import { toast } from "react-toastify";
-import { generateInfo, generateTree } from "@/services/merkleTree";
-import { Ipfs, SaveExam } from "@/services/types";
+import {
+  generateAuth,
+  generateInfo,
+  generateTree,
+} from "@/services/merkleTree";
+import { ExamResponse, Ipfs, SaveExam, StartExam } from "@/services/types";
 import secretjsService from "@/services/secretjs.service";
 import { useContext } from "react";
 import { ClientContext } from "@/types/clientContext";
+import { useRouter } from "next/router";
 
 export const useExam = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { client } = useContext(ClientContext);
+  const router = useRouter();
 
   const loadExams = async () => {
     const { data, isError } = await dispatch(
@@ -54,11 +59,24 @@ export const useExam = () => {
     dispatch(loadLocations(response));
   };
 
+  const updateExam = async (id: string, contractId: number) => {
+    const response = await dispatch(
+      Api.endpoints["updateExam"].initiate({
+        id,
+        updateExamRequest: { contractId },
+      })
+    ).unwrap();
+
+    console.log(response);
+
+    if (response) {
+      dispatch(updateEntity(response));
+    }
+  };
+
   const uploadExam = async (questions: Question[], exam: Exam) => {
     if (!client)
       throw new Error("User need to have wallet for executing transactions");
-
-    console.log(client.address);
 
     const response = await dispatch(
       Api.endpoints["uploadExam"].initiate({
@@ -71,10 +89,9 @@ export const useExam = () => {
     ).unwrap();
 
     if (response) {
-      console.log(response);
       const merkleTreeInfo = generateInfo(
         generateTree(response.organizationAddresses),
-        2
+        response.organizationAddresses.length
       );
 
       const request: SaveExam = {
@@ -84,11 +101,69 @@ export const useExam = () => {
         start_time: exam.time,
       };
 
-      console.log(request);
+      const { exam_id: contractId }: ExamResponse =
+        await secretjsService.saveExamTx(request, client);
 
-      await secretjsService.saveExamTx(request, client);
+      updateExam(exam.id, contractId);
+
+      router.push(`/`);
     }
   };
 
-  return { loadExams, loadExamLocations, createExam, uploadExam };
+  const organizationAddresses = async (examId: string) => {
+    const { data } = await dispatch(
+      Api.endpoints["organizationByExam"].initiate({ id: examId })
+    );
+
+    return data;
+  };
+
+  const startExam = async (exam: Exam) => {
+    if (!client)
+      throw new Error("User need to have wallet for executing transactions");
+
+    const addresses = await organizationAddresses(exam.id);
+
+    if (!addresses) {
+      toast("Exam is not properly created", { type: "error" });
+      return;
+    }
+
+    const addressIndex = addresses.findIndex(
+      (address) => address === client.address
+    );
+
+    const auth = generateAuth(
+      generateTree(addresses),
+      client.address,
+      addressIndex.toString()
+    );
+
+    if (!exam.contractId) {
+      toast("Exam is not on the contract", { type: "error" });
+      return;
+    }
+
+    const { ipfs }: ExamResponse = await secretjsService.startExamTx(
+      { auth, exam_id: exam.contractId },
+      client
+    );
+
+    const response = await dispatch(
+      Api.endpoints["downloadExam"].initiate({
+        downloadRequest: { ipfsInfo: ipfs },
+      })
+    ).unwrap();
+
+    return response;
+  };
+
+  return {
+    loadExams,
+    loadExamLocations,
+    createExam,
+    uploadExam,
+    startExam,
+    organizationAddresses,
+  };
 };

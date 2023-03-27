@@ -3,7 +3,6 @@ import {
   Collection,
   Entity,
   ManyToMany,
-  ManyToOne,
   OneToMany,
   PrimaryKey,
   Property,
@@ -24,10 +23,10 @@ export class Exam extends BaseEntity<Exam, 'id'> {
   time: number;
 
   @Property({ nullable: true })
-  contractId?: string;
+  contractId?: number;
 
   @Property()
-  isReady: boolean = false;
+  isReady: boolean = true;
 
   @ManyToMany(() => User)
   users = new Collection<User>(this);

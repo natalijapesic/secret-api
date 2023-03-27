@@ -7,6 +7,7 @@ import { ChangeEvent, useMemo, useState } from "react";
 import styles from "./styles.module.css";
 import { FilterMatchMode } from "primereact/api";
 import { MdCreateNewFolder, MdOutlineMoreTime } from "react-icons/md";
+import { AiOutlineCloudDownload } from "react-icons/ai";
 import { useRouter } from "next/router";
 
 interface ExamGrid {
@@ -50,6 +51,10 @@ const ExamGrid = () => {
     router.push(`/questions/${examId}`);
   };
 
+  const startExam = (examId: string) => {
+    router.push(`/questions/pdf/${examId}`);
+  };
+
   const actionsBodyTemplate = (rowData: ExamGrid) => {
     return (
       <div className={styles["action-icons"]}>
@@ -60,6 +65,11 @@ const ExamGrid = () => {
         />
         <MdOutlineMoreTime
           onClick={() => createQuestionsFor(rowData.id)}
+          size="1.5rem"
+          cursor={"pointer"}
+        />
+        <AiOutlineCloudDownload
+          onClick={() => startExam(rowData.id)}
           size="1.5rem"
           cursor={"pointer"}
         />

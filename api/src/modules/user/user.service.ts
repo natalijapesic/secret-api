@@ -57,7 +57,7 @@ export class UserService {
 
   async getAll() {
     return (await this.userRepository.findAll()).map((user) => {
-      const { password, jmbg, ...response } = user;
+      const { password, ...response } = user;
       return response;
     });
   }

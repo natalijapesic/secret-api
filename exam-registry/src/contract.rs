@@ -128,12 +128,12 @@ pub fn try_start_exam(
         return Err(StdError::generic_err("Not a valid org."));
     }
 
-    if !current_time.lt(&exam.start_time.minus_seconds(900)) && exam.start_time.gt(&current_time) {
-        return Err(StdError::generic_err(format!(
-            "You can only start the exam 15 minutes before the start time. Start time is: {}",
-            exam.start_time.seconds()
-        )));
-    }
+    // if !current_time.lt(&exam.start_time.minus_seconds(900)) && exam.start_time.gt(&current_time) {
+    //     return Err(StdError::generic_err(format!(
+    //         "You can only start the exam 15 minutes before the start time. Start time is: {}",
+    //         exam.start_time.seconds()
+    //     )));
+    // }
 
     Ok(Response::new().set_data(to_binary(&ExamResponse {
         exam_id,
