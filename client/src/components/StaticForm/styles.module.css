@@ -1,19 +1,14 @@
 .form-container {
   display: grid;
-  grid-template-columns: 35% 30% 35%;
-  grid-template-rows: 10% 40% 30%;
+  place-content: center;
   height: var(--size-full);
 }
 
 .form-item-auth {
+  padding: var(--size-8) 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  grid-column-start: 2;
-  grid-column-end: 3;
-  grid-row-start: 2;
-  grid-row-end: 4;
-  justify-self: center;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   position: relative;
   width: var(--size-full);
@@ -24,7 +19,6 @@
 .form-title-auth {
   font-family: var(--font-family-heading);
   color: var(--color-red-500);
-  padding-bottom: var(--size-24);
   font-size: var(--font-5xl);
   font-weight: var(--font-weight-bold);
 }
@@ -42,6 +36,7 @@
   gap: var(--size-4);
   align-items: center;
   width: var(--size-full);
+  padding: 0 var(--size-12);
 }
 
 .form-controls-auth {

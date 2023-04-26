@@ -15,7 +15,7 @@ export default function CreateQuestions() {
   const { examId } = router.query;
   const { uploadExam } = useExam();
 
-  if (!examId || Array.isArray(examId)) throw new Error("Error should has id");
+  if (!examId || Array.isArray(examId)) return;
 
   const exam = useSelector((state: RootState) => selectExamById(state, examId));
 

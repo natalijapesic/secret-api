@@ -3,16 +3,18 @@ import AlertList from "@/components/ExamAlert";
 import ExamGrid from "@/components/ExamGrid";
 import { Header } from "@/components/header";
 import { useExam } from "@/hooks/useExam";
+import { selectExamsData } from "@/store/exam";
 import Link from "next/link";
 import { useEffect } from "react";
+import { useSelector } from "react-redux";
 import styles from "./styles.module.css";
 
 const Exam = () => {
   const { loadExams } = useExam();
+  const exams = useSelector(selectExamsData);
 
   useEffect(() => {
-    console.log("dlskfdslkjf");
-    loadExams();
+    if (!exams.length) loadExams();
   }, []);
 
   return (

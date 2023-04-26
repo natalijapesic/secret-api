@@ -48,16 +48,13 @@ const StaticForm = ({
                 : EditorMap[typeof value];
 
               return (
-                <div key={property}>
-                  <Controller
-                    name={property}
-                    control={control}
-                    rules={{ required: true }}
-                    render={(props) => (
-                      <Editor {...props} property={property} />
-                    )}
-                  />
-                </div>
+                <Controller
+                  key={property}
+                  name={property}
+                  control={control}
+                  rules={{ required: true }}
+                  render={(props) => <Editor {...props} property={property} />}
+                />
               );
             })}
             <div className={styles[`form-controls-${variant}`]}>

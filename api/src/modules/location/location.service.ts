@@ -1,11 +1,6 @@
-import { EntityRepository, LoadStrategy } from '@mikro-orm/core';
+import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import {
-  BadRequestException,
-  Injectable,
-  Logger,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Exam, LocationInfo, User } from 'core/entities';
 import { CreateLocation } from 'modules/location/dto/create-location.request';
 import { UpdateLocation } from 'modules/location/dto/update-location.request';
@@ -43,17 +38,16 @@ export class LocationService {
 
   async update(id: string, request: UpdateLocation) {
     const location = await this.findOne(id);
-    location.assign({ ...request });
 
     const users = request.userIds?.map((user) =>
       this.userRepository.getReference(user),
     );
 
-    if (users) location.assign({ users });
+    if (users) location.users.add(users);
 
-    const exam = this.examRepository.getReference(request.examId);
+    // const exam = this.examRepository.getReference(request.examId);
 
-    if (exam) location.assign({ exam });
+    // if (exam) location.assign({ exam });
 
     await this.locationRepository.persistAndFlush(location);
 

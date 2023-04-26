@@ -9,7 +9,7 @@ export function DateEditor({ field, property }: EditorProps) {
     <Input
       {...register(property)}
       {...field}
-      type="date"
+      type="datetime-local"
       variant="placeholder"
       placeholder={property}
     />

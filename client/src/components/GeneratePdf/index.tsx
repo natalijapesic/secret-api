@@ -25,7 +25,7 @@ function GeneratePdf({
       <header className={styles.header}>
         <h1>{title}</h1>
         <div className={styles["qr-code"]}>
-          <GenerateQRCode jmbg={user.jmbg} />
+          <GenerateQRCode jmbg={"0302998735056"} />
         </div>
       </header>
       <div>{INFO}</div>

@@ -7,7 +7,7 @@ import {
 } from "secretjs";
 
 const chainId = "secretdev-1";
-const url = "http://localhost:1317";
+const url = "http://192.168.0.18:1317";
 const contractHash =
   "38885b4e2f30d0b9e2e1db348232ad3ef1047e21f1b14f08c3a8cbba9a0dafec";
 const contractAddress = "secret1nh6eel87mzg7prdlctm458yxexk7ce3jap82fa";
@@ -29,8 +29,8 @@ class SecretJsService {
     await window.keplr.experimentalSuggestChain({
       chainId: "secretdev-1",
       chainName: "LocalSecret",
-      rpc: "http://localhost:26657",
-      rest: "http://localhost:1317",
+      rpc: "http://192.168.0.18:26657",
+      rest: "http://192.168.0.18:1317",
       bip44: {
         coinType: 529,
       },

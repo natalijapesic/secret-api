@@ -8,7 +8,7 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { Header } from "@/components/header";
 
 export default function ExamForm() {
-  const { createExam } = useExam();
+  const { createExam, refetchExams } = useExam();
 
   const { handleSubmit, register, control } = useForm<CreateExam>({
     defaultValues: {
@@ -28,7 +28,7 @@ export default function ExamForm() {
     control,
   });
 
-  const onSubmit = (data: CreateExam) => {
+  const onSubmit = async (data: CreateExam) => {
     const time = new Date(data.time).getTime() / 1000;
     const locations = data.locations.map((location) => {
       return {
@@ -42,7 +42,8 @@ export default function ExamForm() {
       locations,
     };
 
-    createExam(request);
+    await createExam(request);
+    // await refetchExams();
   };
 
   return (
@@ -62,7 +63,7 @@ export default function ExamForm() {
               <div className={styles["general-inputs"]}>
                 <Input type="text" placeholder="Name" {...register(`name`)} />
                 <Input
-                  type="date"
+                  type="datetime-local"
                   placeholder="Exam Time"
                   {...register("time")}
                 />

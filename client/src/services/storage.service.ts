@@ -11,6 +11,7 @@ class StoreService {
       id: response.id,
       role: response.role as Role,
       username: response.role,
+      jmbg: null,
     };
     localStorage.setItem("user", JSON.stringify(user));
   }

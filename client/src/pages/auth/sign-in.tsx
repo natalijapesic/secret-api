@@ -14,7 +14,7 @@ export default function SignIn() {
       entity={signValues}
       title="SecretExam"
       variant="auth"
-      subtitle="Enter Account"
+      subtitle="Sign In"
       submit="Sign In"
       onSubmit={onSubmit}
       href="/auth/sign-up"

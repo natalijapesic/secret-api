@@ -45,6 +45,7 @@ export const useExam = () => {
     ).unwrap();
 
     if (response) {
+      console.log("HERE", response);
       dispatch(appendEntity(response));
       toast("Created exam", { type: "success" });
       router.push(`/`);
@@ -159,11 +160,16 @@ export const useExam = () => {
     return response;
   };
 
+  const refetchExams = async () => {
+    await loadExams();
+  };
+
   return {
     loadExams,
     loadExamLocations,
     createExam,
     uploadExam,
+    refetchExams,
     startExam,
     organizationAddresses,
   };

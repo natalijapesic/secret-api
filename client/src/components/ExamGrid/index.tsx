@@ -79,19 +79,11 @@ const ExamGrid = () => {
 
   return (
     <div className={styles["grid-container"]}>
-      <header className={styles["grid-search"]}>
-        <input
-          value={globalFilterValue}
-          onChange={onGlobalFilterChange}
-          placeholder="Keyword Search"
-          className={styles["search"]}
-        />
-      </header>
-
       <DataTable
         filters={filters}
         paginator
-        rows={3}
+        rows={5}
+        key={gridData.length}
         value={gridData}
         tableStyle={{ minWidth: "40rem" }}
         globalFilterFields={["name"]}
@@ -106,7 +98,7 @@ const ExamGrid = () => {
         />
         <Column
           field="createQuestions"
-          header="Create questions"
+          header="Actions"
           style={{ width: "15%" }}
           body={actionsBodyTemplate}
         />
