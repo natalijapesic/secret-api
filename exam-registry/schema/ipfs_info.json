@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "IpfsInfo",
+  "type": "object",
+  "required": [
+    "iv",
+    "path",
+    "secret"
+  ],
+  "properties": {
+    "iv": {
+      "type": "string"
+    },
+    "path": {
+      "type": "string"
+    },
+    "secret": {
+      "type": "string"
+    }
+  }
+}

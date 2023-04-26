@@ -1,0 +1,83 @@
+.form-container {
+  display: grid;
+  place-content: center;
+  height: var(--size-full);
+}
+
+.form-item-auth {
+  padding: var(--size-8) 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  position: relative;
+  width: var(--size-full);
+  height: var(--size-full);
+  background-color: var(--color-white);
+}
+
+.form-title-auth {
+  font-family: var(--font-family-heading);
+  color: var(--color-red-500);
+  font-size: var(--font-5xl);
+  font-weight: var(--font-weight-bold);
+}
+
+.form-subtitle-auth {
+  color: var(--color-red);
+  font-size: var(--font-3xl);
+  font-weight: var(--font-weight-bold);
+  padding: var(--size-5);
+}
+
+.form-auth {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-4);
+  align-items: center;
+  width: var(--size-full);
+  padding: 0 var(--size-12);
+}
+
+.form-controls-auth {
+  display: flex;
+  gap: var(--size-4);
+  padding-top: var(--size-6);
+}
+
+.form-item-exam {
+  display: flex;
+  flex-direction: column;
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 2;
+  gap: var(--size-4);
+  grid-row-end: 3;
+}
+
+.form-title-exam {
+  font-family: var(--font-family-heading);
+  color: var(--color-red-500);
+  font-size: var(--font-4xl);
+  font-weight: var(--font-weight-bold);
+  padding-bottom: var(--size-4);
+}
+
+.form-subtitle-exam {
+  color: var(--color-red-500);
+  font-size: var(--font-2xl);
+  font-weight: var(--font-weight-bold);
+  padding-bottom: var(--size-4);
+}
+
+.form-exam {
+  display: flex;
+  gap: var(--size-4);
+  width: var(--size-full);
+  align-items: center;
+}
+
+.form-controls-exam {
+  display: flex;
+  gap: var(--size-4);
+}

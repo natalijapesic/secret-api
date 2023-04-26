@@ -1,0 +1,74 @@
+.list-container {
+  display: flex;
+  width: var(--size-full);
+  flex-wrap: wrap;
+  gap: var(--size-4);
+}
+
+.exam-id {
+  color: var(--color-grey-200);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-xl);
+}
+
+.exam-name {
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-xl);
+}
+
+.alert-container {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  row-gap: var(--size-6);
+  border: 1px solid var(--color-grey-100);
+  border-radius: var(--size-2);
+  width: 30%;
+  padding: var(--size-4);
+}
+
+.exam-info {
+  color: var(--color-grey-200);
+  font-weight: var(--font-weight-bold);
+  display: flex;
+  row-gap: var(--size-2);
+  column-gap: var(--size-4);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.exam-location {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--size-2);
+}
+
+.exam-date {
+  display: flex;
+  align-items: center;
+  gap: var(--size-2);
+}
+
+.exam-classroom {
+  padding-left: var(--size-2);
+  display: flex;
+  align-items: center;
+  gap: var(--size-1);
+}
+
+.upcoming {
+  color: var(--color-red);
+  font-weight: var(--font-weight-semibold);
+  border-radius: 20px;
+  padding: var(--size-1) var(--size-2) var(--size-1) var(--size-2);
+  border: 1px solid var(--color-red);
+  white-space: nowrap;
+}
+
+.exam-container {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: var(--size-4);
+  column-gap: var(--size-6);
+  align-items: center;
+}

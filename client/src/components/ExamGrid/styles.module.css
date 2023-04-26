@@ -1,0 +1,32 @@
+.grid-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.grid-search {
+  width: 60%;
+  padding: var(--size-4);
+  display: flex;
+  justify-content: end;
+}
+
+.search:focus {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  outline-style: none;
+
+}
+
+.search {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+}
+
+
+.action-icons{
+  display: flex;
+  gap: var(--size-6)
+}

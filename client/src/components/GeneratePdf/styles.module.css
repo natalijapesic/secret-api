@@ -1,0 +1,36 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+}
+
+.header {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+.warning {
+    padding-top: 4rem;
+    border-bottom: 3px solid black;
+    font-size: larger;
+    font-style: italic;
+}
+
+.qr-code {
+    justify-self: end;
+}
+
+.options {
+    display: flex;
+    gap: 2rem;
+}
+
+.question {
+    padding-bottom: 3rem;
+    font-size: large;
+}
+
+.question-text {
+    padding-top: 1rem;
+}
